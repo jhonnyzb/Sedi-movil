@@ -5,14 +5,34 @@ import { login } from '../../../servicios/generales/login'
 
 export default class AnatomyExample extends Component {
 
+    constructor(props) {
+
+        super(props)
+
+        this.state = {
+            email: '',
+            password: '',
+        }
+
+    }
+
+
     login = () => {
-        login().then(
+        // if (this.state.email === '') {
+        //     return
+        // }
+        // if (this.state.password === '') {
+        //     return
+        // }
+        login(this.state.email, this.state.password).then(
             (res) => {
-                if (res.data.userId === 1) {
+                if (res.data.userId === 2) {
                     this.props.navigation.navigate('inicioUsuario')
                 }
-                else if (res.data.userId === 2) {
+                else if (res.data.userId === 1) {
+                    this.setState({ email: '', password: ''})
                     this.props.navigation.navigate('inicioSuperAdmin')
+                    
                 }
                 else if (res.data.userId === 3) {
                     this.props.navigation.navigate('inicioAdmin')
@@ -27,6 +47,8 @@ export default class AnatomyExample extends Component {
     }
 
 
+
+
     render() {
 
         return (
@@ -39,11 +61,17 @@ export default class AnatomyExample extends Component {
                         </CardItem>
                         <CardItem >
                             <Body>
-                                <Item rounded style={styles.input}>
-                                    <Input placeholder='Email' />
+                                <Item rounded style={{marginBottom: '5%', paddingStart: 8, backgroundColor: this.state.inputEmail}}>
+                                    <Input placeholder='Email'
+                                        onChangeText={valueEmail => this.setState({ email: valueEmail })}
+                                        value={this.state.email}
+                                    />
                                 </Item>
-                                <Item rounded rounded style={styles.input}>
-                                    <Input placeholder='Contraseña' />
+                                <Item rounded rounded style={{marginBottom: '5%', paddingStart: 8, backgroundColor: this.state.inputEmail}}>
+                                    <Input placeholder='Contraseña'
+                                        onChangeText={valuePassowrd => this.setState({ password: valuePassowrd})}
+                                        value={this.state.password}
+                                    />
                                 </Item>
                             </Body>
                         </CardItem>
@@ -82,10 +110,6 @@ const styles = StyleSheet.create({
         paddingBottom: '8%',
         marginTop: '12%'
 
-    },
-    input: {
-        marginBottom: '5%',
-        paddingStart: 8
     },
     contrasena:
     {

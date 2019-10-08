@@ -4,6 +4,8 @@ import { createStackNavigator } from 'react-navigation-stack';
 import Login from './screens/general/containers/login.js';
 import inicioUsuario from './screens/usuario/containers/inicioUsuario';
 import inicioSuperAdmin from './screens/superAdmin/containers/inicioSuperAdmin';
+import crudUsuarios from './screens/superAdmin/containers/crudUsuarios';
+import crearUsuarios from './screens/superAdmin/containers/crearUsuario'
 import inicioAdmin from './screens/admin/containers/inicioAdmin';
 import busquedaCursosUsuario from './screens/usuario/containers/busquedaCursosUsuario'
 import { Image,Text, StyleSheet } from 'react-native'
@@ -79,6 +81,29 @@ const Navegacion = createStackNavigator({
             headerRight: <BotonBarra />
         }
     },
+    crudUsuarios: {
+        screen: crudUsuarios,
+        navigationOptions: {
+            headerTitle: <LogoTitle />,
+            headerStyle: {
+                backgroundColor: '#343434'
+            },
+            headerTintColor: '#ff5a06',
+            headerRight: <BotonBarra />
+        }
+    },
+    crearUsuarios: {
+        screen: crearUsuarios,
+        navigationOptions: {
+            headerTitle: <LogoTitle />,
+            headerStyle: {
+                backgroundColor: '#343434'
+            },
+            headerTintColor: '#ff5a06',
+            headerRight: <BotonBarra />
+        }
+    },
+
     inicioAdmin: {
         screen: inicioAdmin,
         navigationOptions: {

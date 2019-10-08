@@ -1,21 +1,45 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, ImageBackground, ScrollView } from 'react-native'
-
+import { Text, View, StyleSheet } from 'react-native'
+import { Icon } from 'react-native-elements'
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export default class inicioUsuario extends Component {
-    
+
+
+    crudUsuarios = () => {
+        this.props.navigation.navigate('crudUsuarios')
+    }
 
     render() {
         return (
-            <ScrollView>
-                <View>
-                    <ImageBackground source={require('../../../assets/img/fondoUsuario1.jpg')} style={{ width: null, height: '100%', flex: 1 }} >
-                        <Text>inicioSuperAdmin</Text>
-                    </ImageBackground>
-                    <Text>hola</Text>
+            <View style={styles.container}>
+                <Text style={styles.texto1}>Crea un recurso</Text>
+                <TouchableOpacity onPress = {this.crudUsuarios} >
+                    <View style={styles.bcrearUsuario}>
+                        <Text style={styles.textoBcrearUsuario}>Crear Usuario</Text>
+                        <Icon color="white" name="arrow-right" type="font-awesome" size={16} />
+                    </View>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={()=> {alert('crear usuaario')}} >
+                    <View style={styles.bcrearUsuario}>
+                        <Text style={styles.textoBcrearUsuario}>Crear cliente</Text>
+                        <Icon color="white" name="arrow-right" type="font-awesome" size={16} />
+                    </View>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={()=> {alert('crear usuaario')}} >
+                    <View style={styles.bcrearUsuario}>
+                        <Text style={styles.textoBcrearUsuario}>Crear licencia</Text>
+                        <Icon color="white" name="arrow-right" type="font-awesome" size={16} />
+                    </View>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={()=> {alert('crear usuaario')}} >
+                    <View style={styles.bcrearUsuario}>
+                        <Text style={styles.textoBcrearUsuario}>Crear curso</Text>
+                        <Icon color="white" name="arrow-right" type="font-awesome" size={16} />
+                    </View>
+                </TouchableOpacity>
+            </View>
 
-                </View>
-            </ScrollView>
         );
     }
 
@@ -25,6 +49,28 @@ export default class inicioUsuario extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        paddingStart: '10%',
+        paddingEnd: '10%',
+        paddingTop: '8%'
+    },
+    texto1: {
+        fontWeight: 'bold',
+        fontSize: 20,
+        marginBottom: '10%'
+    },
+    bcrearUsuario: {
+        flexDirection: 'row',
+        borderRadius: 5,
+        backgroundColor: '#ff5a06',
+        padding: 25,
+        marginBottom: '10%',
+        justifyContent: 'space-between'
+    },
+    textoBcrearUsuario: {
+        color: 'white',
+        fontWeight: 'bold',
+        fontSize: 16,
+        marginEnd: '50%'
     }
 
 })

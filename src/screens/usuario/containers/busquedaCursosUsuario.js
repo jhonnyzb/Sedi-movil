@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { Text, View, Image, StyleSheet, ActivityIndicator, FlatList, Dimensions } from 'react-native';
-import { Item, Input, Icon } from 'native-base';
-import { consultaCursosUsuario } from '../../../servicios/usuario/consultaCursosUsuario';
+import { Item, Input, Button } from 'native-base';
+import { Icon } from 'react-native-elements'
+import { consultaCursosUsuario } from '../../../servicios/serviciosUsuario/consultaCursosUsuario';
 import TextoCurso from '../componentes/textoCursos'
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const { width } = Dimensions.get('window');
 
@@ -25,9 +27,25 @@ export default class App extends Component {
     cursosVista(item) {
         const { id, first_name, last_name, email, avatar } = item.item;
         return (
-                <View style={{ width: width / 2.3, height: 100, backgroundColor: '#ff5a06', justifyContent: 'center', margin: 1, borderRadius: 10 }} >
-                    <Text style={{ fontSize: 22, textAlign: 'center', color: '#fff' }}> {first_name} </Text>
+            <View style={styles.vistaCursosContainer} >
+                <View style={styles.vistaCursos}>
+                    <View style={styles.iconoCurso}>
+                        <Icon
+                            name='logo-nodejs'
+                            type='ionicon'
+                            color='#ff5a06'
+                            size={45}
+                        />
+                    </View>
                 </View>
+                <View style={styles.textocursoI}>
+                    <Text>Diseño Arquitectura y desarrollo</Text>
+                    <TouchableOpacity onPress={() => alert('This is a button!')}>
+                        <Text style={{ paddingHorizontal: 12, borderRadius: 5, paddingVertical: 6, marginTop: 8, backgroundColor: '#ff5a06', color: 'white', borderColor: '#ff5a06' }}>Ver mas</Text>
+                    </TouchableOpacity>
+
+                </View>
+            </View>
 
         )
     }
@@ -35,7 +53,7 @@ export default class App extends Component {
     render() {
         if (this.state.isLoading) {
             return (
-                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center'  }}>
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                     <ActivityIndicator />
                 </View>
             )
@@ -45,7 +63,7 @@ export default class App extends Component {
             <View style={styles.container}>
                 <TextoCurso />
                 <Item regular style={styles.input}>
-                    <Icon active name='ios-search' style={styles.icon} />
+                    <Icon name='search' color='#ff5a06' type='font-awesone' size={30} />
                     <Input placeholder='Busca un curso a tu medida' placeholderTextColor='#CFCFCF' />
                 </Item>
                 <View style={{ flex: 1, flexDirection: 'row' }}>
@@ -63,7 +81,7 @@ export default class App extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingTop: 20,
+        paddingTop: 15,
         paddingStart: 20,
         paddingEnd: 20
     },
@@ -73,10 +91,37 @@ const styles = StyleSheet.create({
         marginBottom: 10
 
     },
-    icon: {
-        color: '#ff5a06',
-        fontWeight: 'bold'
+    vistaCursosContainer: {
+        flexDirection: 'row',
+
     },
-    
+    vistaCursos: {
+        width: 70,
+        height: 70,
+        backgroundColor: '#ff5a06',
+        justifyContent: 'center',
+        borderRadius: 10,
+        marginBottom: 5,
+        paddingLeft: 15,
+        paddingRight: 15,
+        paddingBottom: 25
+    },
+    iconoCurso: {
+        borderWidth: 1,
+        backgroundColor: 'white',
+        borderColor: 'white',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100%',
+        borderBottomRightRadius: 10,
+        borderBottomLeftRadius: 10
+    },
+    textocursoI: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingLeft: 20,
+        paddingRight: 20
+    }
+
 
 });
