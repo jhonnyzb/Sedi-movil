@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     texto1: {
         fontSize: 20,
         fontWeight: 'bold',
-        marginBottom: 12
+        marginBottom: 10
     }
     
 })
