@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { Text, View, Image, StyleSheet, ActivityIndicator, FlatList, Dimensions } from 'react-native';
-import axios from 'axios';
+import { Item, Input, Icon } from 'native-base';
+import { consultaCursosUsuario } from '../../../servicios/usuario/consultaCursosUsuario';
+import TextoCurso from '../componentes/textoCursos'
 
-const { width, height } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
 export default class App extends Component {
     constructor(props) {
@@ -11,8 +13,8 @@ export default class App extends Component {
     }
 
     componentDidMount() {
-        axios.get('https://reqres.in/api/users?page=2')
-           .then(res => {
+        consultaCursosUsuario().then(
+            res => {
                 this.setState({
                     isLoading: false,
                     data: res.data.data,
@@ -20,30 +22,20 @@ export default class App extends Component {
             })
     }
 
-    renderItem(item) {
+    cursosVista(item) {
         const { id, first_name, last_name, email, avatar } = item.item;
         return (
-            <View style={styles.itemView}>
-                <View style={styles.imgContainer}>
-                    <Image style={styles.imageStyle}
-                        source={{ uri: avatar }}
-                    />
+                <View style={{ width: width / 2.3, height: 100, backgroundColor: '#ff5a06', justifyContent: 'center', margin: 1, borderRadius: 10 }} >
+                    <Text style={{ fontSize: 22, textAlign: 'center', color: '#fff' }}> {first_name} </Text>
                 </View>
-                
-                <View style={styles.itemInfo}>
-                    <Text style={styles.name}>
-                        {first_name +' '+ last_name}
-                    </Text>
-                    <Text numberOfLines={1}>{email}</Text>
-                </View>
-            </View>
-        );
+
+        )
     }
 
     render() {
         if (this.state.isLoading) {
             return (
-               <View style={{ flex: 1, padding: 20 }}>
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center'  }}>
                     <ActivityIndicator />
                 </View>
             )
@@ -51,53 +43,40 @@ export default class App extends Component {
 
         return (
             <View style={styles.container}>
-                <FlatList
-                    data={this.state.data}
-                    renderItem={this.renderItem.bind(this)}
-                    keyExtractor={item => item.id}
-                />
+                <TextoCurso />
+                <Item regular style={styles.input}>
+                    <Icon active name='ios-search' style={styles.icon} />
+                    <Input placeholder='Busca un curso a tu medida' placeholderTextColor='#CFCFCF' />
+                </Item>
+                <View style={{ flex: 1, flexDirection: 'row' }}>
+                    <FlatList
+                        data={this.state.data}
+                        renderItem={this.cursosVista.bind(this)}
+                        keyExtractor={item => item.id.toString()}
+                    />
+                </View>
             </View>
         );
     }
 }
 
 const styles = StyleSheet.create({
-   container: {
-       flex: 1,
-       justifyContent: 'center',
-       alignItems: 'center',
-       backgroundColor: '#F5FCFF',
-   },
-   itemView: {
-       flex: 1,
-       width,
-       borderBottomWidth: 0.5,
-       borderColor: '#cdcdcd',
-       borderStyle: 'solid',
-       paddingHorizontal: 12,
-       flexDirection: 'row',
-   },
-   imgContainer: {
-       flex: 0,
-       borderColor: '#f4f4f4',
-       borderWidth: 1.5,
-       height: 60,
-       width: 60,
-       alignItems: 'center',
-       justifyContent: 'center',
-   },
-   itemInfo: {
-       flex: 1,
-       marginHorizontal: 10,
-   },
-   name: {
-       fontFamily: 'Roboto',
-       fontSize: 18,
-       color: '#ff0000',
-       textAlign: 'left',
-   },
-   imageStyle: {
-       height: 50,
-       width: 50,
-   }
+    container: {
+        flex: 1,
+        paddingTop: 20,
+        paddingStart: 20,
+        paddingEnd: 20
+    },
+    input: {
+        borderRadius: 15,
+        marginTop: 10,
+        marginBottom: 10
+
+    },
+    icon: {
+        color: '#ff5a06',
+        fontWeight: 'bold'
+    },
+    
+
 });

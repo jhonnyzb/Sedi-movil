@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { StyleSheet, ImageBackground, View, Image } from 'react-native'
 import { Card, CardItem, Text, Body, Button, Item, Input } from 'native-base';
-import logueo from '../../../servicios/generales/login'
+import { login } from '../../../servicios/generales/login'
 
 export default class AnatomyExample extends Component {
-    
+
     login = () => {
-        logueo.login()
-            .then((res) => {
+        login().then(
+            (res) => {
                 if (res.data.userId === 1) {
                     this.props.navigation.navigate('inicioUsuario')
                 }
@@ -20,23 +20,14 @@ export default class AnatomyExample extends Component {
                 else {
                     alert('Error de credenciales')
                 }
-            })
-            .catch(function (error) {
+            }).catch(function (error) {
                 alert(error)
             })
+
     }
 
 
     render() {
-        // if(this.state.isLoading){
-        //     return(
-        //       <View style={{flex: 1, padding: 20}}>
-        //         <ActivityIndicator/>
-        //       </View>
-        //     )
-        //   }
-
-        // const { users } = this.state
 
         return (
             <ImageBackground source={require('../../../assets/img/fondoLogin.jpg')} style={{ flex: 1, width: null, height: null, }}>
