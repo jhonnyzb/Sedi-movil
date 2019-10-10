@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, Text, StyleSheet, ImageBackground } from 'react-native';
-import { Icon, withTheme } from 'react-native-elements'
+import { Icon } from 'react-native-elements'
 
 
-function textoHome() {
+function cabeceraCrudSadmin (props) {
 
     return (
         <View>
@@ -12,7 +12,7 @@ function textoHome() {
                     <Icon name='user-circle-o' type='font-awesome' size={50} color='white' containerStyle={{ borderRadius: 30, borderColor: '#000', borderWidth: 3 }} />
                 </View>
                 <View>
-                    <Text style={styles.texto1}>Crea un usuario</Text>
+                    <Text style={styles.texto1}>{props.titulo}</Text>
                 </View>
             </ImageBackground>
         </View>
@@ -33,4 +33,4 @@ const styles = StyleSheet.create({
     }
 
 })
-export default textoHome
+export default cabeceraCrudSadmin

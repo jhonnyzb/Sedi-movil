@@ -10,6 +10,6 @@ export function crearUsuario_(td,nd,nc,em,te,co,rol) {
         co:co,
         rl:rol
     }
-    alert(usuario)
+    //alert(JSON.stringify(usuario))
       //return axios.get('http://10.131.10.32/superAdmin/showClient')     
 }

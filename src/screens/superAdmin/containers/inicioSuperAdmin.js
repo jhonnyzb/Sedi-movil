@@ -9,6 +9,16 @@ export default class inicioUsuario extends Component {
     crudUsuarios = () => {
         this.props.navigation.navigate('crudUsuarios')
     }
+    crudClientes = () => {
+        this.props.navigation.navigate('crudClientes')
+    }
+    crudLicencias = () => {
+        this.props.navigation.navigate('crudLicencias')
+    }
+    crudCursos = () => {
+        this.props.navigation.navigate('crudCursos')
+    }
+
 
     render() {
         return (
@@ -20,19 +30,19 @@ export default class inicioUsuario extends Component {
                         <Icon color="white" name="arrow-right" type="font-awesome" size={16} />
                     </View>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=> {alert('crear usuaario')}} >
+                <TouchableOpacity onPress = {this.crudClientes} >
                     <View style={styles.bcrearUsuario}>
                         <Text style={styles.textoBcrearUsuario}>Crear cliente</Text>
                         <Icon color="white" name="arrow-right" type="font-awesome" size={16} />
                     </View>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=> {alert('crear usuaario')}} >
+                <TouchableOpacity onPress = {this.crudLicencias} >
                     <View style={styles.bcrearUsuario}>
                         <Text style={styles.textoBcrearUsuario}>Crear licencia</Text>
                         <Icon color="white" name="arrow-right" type="font-awesome" size={16} />
                     </View>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=> {alert('crear usuaario')}} >
+                <TouchableOpacity onPress = {this.crudCursos} >
                     <View style={styles.bcrearUsuario}>
                         <Text style={styles.textoBcrearUsuario}>Crear curso</Text>
                         <Icon color="white" name="arrow-right" type="font-awesome" size={16} />

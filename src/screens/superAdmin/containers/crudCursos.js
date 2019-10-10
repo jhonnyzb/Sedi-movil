@@ -7,14 +7,12 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 
 
 
-
-
-
-class crudUsuarios extends Component {
+class crudCursos extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { isLoading: true, 
+        this.state = { 
+            isLoading: true, 
             data: "" 
         
         }
@@ -31,37 +29,37 @@ class crudUsuarios extends Component {
             })
     }
 
-    crearUsuario = ()=>{
-        this.props.navigation.navigate('crearUsuarios')
+    crearCursos = ()=>{
+        this.props.navigation.navigate('crearCursos')
     }
 
-    detalleUsuario = (data) => {
-      alert('detalle usuario', data)
+    detalleCurso = (data) => {
+      alert('detalle cursos', data)
     }
 
-    editarUsuario = (data)=>{
-        alert('edicion usuario', data)
+    editarCurso = (data)=>{
+        alert('edicion cursos', data)
     }
 
-    eliminarUsuario = (data)=>{
-        alert('eliminar usuario', data)
+    eliminarCurso = (data)=>{
+        alert('eliminar cursos', data)
     }
 
 
 
-    usuarios(item) {
+    cursos(item) {
         const { id, first_name, last_name, email, avatar } = item.item;
         return (
-            <View style={styles.vistaUsuarios}>
-                <Text>Usuario</Text>
+            <View style={styles.vistaCursos}>
+                <Text>Cursos</Text>
                 <View style={{ paddingEnd: 5, flexDirection: 'row' }}>
-                    <TouchableOpacity onPress={()=>{this.detalleUsuario(item)}}>
+                    <TouchableOpacity onPress={()=>{this.detalleCurso(item)}}>
                         <Icon name='search-plus' type='font-awesome' color='#ff5a06' size={20} containerStyle={{ marginHorizontal: 16 }} />
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={()=>{this.editarUsuario(item)}}>
+                    <TouchableOpacity onPress={()=>{this.editarCurso(item)}}>
                         <Icon name='pencil' type='font-awesome' color='#ff5a06' size={20} containerStyle={{ marginHorizontal: 16 }} />
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={()=>{this.eliminarUsuario(item)}}>
+                    <TouchableOpacity onPress={()=>{this.eliminarCurso(item)}}>
                         <Icon name='trash-o' type='font-awesome' color='#ff5a06' size={20} containerStyle={{ marginHorizontal: 16 }} />
                     </TouchableOpacity>
                 </View>
@@ -87,12 +85,12 @@ class crudUsuarios extends Component {
 
         return (
             <View style={styles.container}>
-                <Text style={styles.texto1}>Mira tus usuarios</Text>
+                <Text style={styles.texto1}>Mira tus cursos</Text>
                 <Text style={styles.texto2}>Edita o agrega el que necesites</Text>
                 <View style={{ flex: 1, flexDirection: 'row', marginTop: 10 }}>
                     <FlatList
                         data={this.state.data}
-                        renderItem={this.usuarios.bind(this)}
+                        renderItem={this.cursos.bind(this)}
                         keyExtractor={item => item.id.toString()}
                         extraData={this.state}
                     />
@@ -101,7 +99,7 @@ class crudUsuarios extends Component {
                     direction="up"
                     style={styles.colorFab}
                     position="bottomRight"
-                    onPress = {this.crearUsuario}>
+                    onPress = {this.crearCursos}>
                     <Icon name="add" color='white' />
                 </Fab>
             </View>
@@ -109,7 +107,7 @@ class crudUsuarios extends Component {
     }
 }
 
-export default crudUsuarios;
+export default crudCursos;
 
 const styles = StyleSheet.create({
     container: {
@@ -122,7 +120,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 20,
     },
-    vistaUsuarios: {
+    vistaCursos: {
         flexDirection: 'row',
         borderBottomWidth: 1,
         borderBottomColor: '#C8C3C3',

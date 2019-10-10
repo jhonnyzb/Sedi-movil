@@ -1,15 +1,24 @@
 import React from 'react';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
+import { Image,Text, StyleSheet } from 'react-native'
+import { TouchableOpacity } from 'react-native-gesture-handler';
+
+//rutas
 import Login from './screens/general/containers/login.js';
 import inicioUsuario from './screens/usuario/containers/inicioUsuario';
 import inicioSuperAdmin from './screens/superAdmin/containers/inicioSuperAdmin';
 import crudUsuarios from './screens/superAdmin/containers/crudUsuarios';
-import crearUsuarios from './screens/superAdmin/containers/crearUsuario'
+import crudClientes from './screens/superAdmin/containers/crudClientes';
+import crudLicencias from './screens/superAdmin/containers/crudLicencias';
+import crudCursos from './screens/superAdmin/containers/crudCursos';
+import crearUsuarios from './screens/superAdmin/containers/crearUsuario';
+import crearClientes from './screens/superAdmin/containers/crearCliente';
+import crearLicencias from './screens/superAdmin/containers/crearLicencia';
+import crearCursos from './screens/superAdmin/containers/crearCurso';
 import inicioAdmin from './screens/admin/containers/inicioAdmin';
 import busquedaCursosUsuario from './screens/usuario/containers/busquedaCursosUsuario'
-import { Image,Text, StyleSheet } from 'react-native'
-import { TouchableOpacity } from 'react-native-gesture-handler';
+
 
 class LogoTitle extends React.Component {
     render() {
@@ -92,8 +101,75 @@ const Navegacion = createStackNavigator({
             headerRight: <BotonBarra />
         }
     },
+    crudClientes: {
+        screen: crudClientes,
+        navigationOptions: {
+            headerTitle: <LogoTitle />,
+            headerStyle: {
+                backgroundColor: '#343434'
+            },
+            headerTintColor: '#ff5a06',
+            headerRight: <BotonBarra />
+        }
+    },
+    crudLicencias: {
+        screen: crudLicencias,
+        navigationOptions: {
+            headerTitle: <LogoTitle />,
+            headerStyle: {
+                backgroundColor: '#343434'
+            },
+            headerTintColor: '#ff5a06',
+            headerRight: <BotonBarra />
+        }
+    },
+    crudCursos: {
+        screen: crudCursos,
+        navigationOptions: {
+            headerTitle: <LogoTitle />,
+            headerStyle: {
+                backgroundColor: '#343434'
+            },
+            headerTintColor: '#ff5a06',
+            headerRight: <BotonBarra />
+        }
+    },
+
     crearUsuarios: {
         screen: crearUsuarios,
+        navigationOptions: {
+            headerTitle: <LogoTitle />,
+            headerStyle: {
+                backgroundColor: '#343434'
+            },
+            headerTintColor: '#ff5a06',
+            headerRight: <BotonBarra />
+        }
+    },
+    crearClientes: {
+        screen: crearClientes,
+        navigationOptions: {
+            headerTitle: <LogoTitle />,
+            headerStyle: {
+                backgroundColor: '#343434'
+            },
+            headerTintColor: '#ff5a06',
+            headerRight: <BotonBarra />
+        }
+    },
+    crearLicencias: {
+        screen: crearLicencias,
+        navigationOptions: {
+            headerTitle: <LogoTitle />,
+            headerStyle: {
+                backgroundColor: '#343434'
+            },
+            headerTintColor: '#ff5a06',
+            headerRight: <BotonBarra />
+        }
+    },
+    crearCursos: {
+        screen: crearCursos,
         navigationOptions: {
             headerTitle: <LogoTitle />,
             headerStyle: {
