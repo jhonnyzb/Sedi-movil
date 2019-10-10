@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, FlatList } from 'react-native';
-import { consultaCursosUsuario } from '../../../servicios/serviciosUsuario/consultaCursosUsuario'
+import { consultaCursosUsuario } from '../../../servicios/serviciosUsuario/consultaCursosUsuario';
+import { consultaClientes } from '../../../servicios/serviciosSuperAdmin/crudClientes';
 import { Fab } from 'native-base';
 import { Icon } from 'react-native-elements'
 import { TouchableOpacity } from 'react-native-gesture-handler';
-
-
-
 
 
 
@@ -23,11 +21,11 @@ class crudClientes extends Component {
 
 
     componentDidMount() {
-        consultaCursosUsuario().then(
+        consultaClientes().then(
             res => {
                 this.setState({
                     isLoading: false,
-                    data: res.data.data,
+                    data: res.data,
                 })
             })
     }
@@ -51,10 +49,10 @@ class crudClientes extends Component {
 
 
     clientes(item) {
-        const { id, first_name, last_name, email, avatar } = item.item;
+        const { id, fdocument_type_id, document_number, name, phone, email } = item.item;
         return (
             <View style={styles.vistaClientes}>
-                <Text>clientes</Text>
+                <Text>{name}</Text>
                 <View style={{ paddingEnd: 5, flexDirection: 'row' }}>
                     <TouchableOpacity onPress={()=>{this.detalleCliente(item)}}>
                         <Icon name='search-plus' type='font-awesome' color='#ff5a06' size={20} containerStyle={{ marginHorizontal: 16 }} />

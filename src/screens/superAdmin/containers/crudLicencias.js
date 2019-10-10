@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, FlatList } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator, FlatList} from 'react-native';
 import { consultaCursosUsuario } from '../../../servicios/serviciosUsuario/consultaCursosUsuario'
 import { Fab } from 'native-base';
 import { Icon } from 'react-native-elements'
@@ -34,7 +34,8 @@ class crudLicencias extends Component {
     }
 
     detalleLicencia = (data) => {
-      alert('detalle Licencia', data)
+       
+    
     }
 
     editarLicencia = (data)=>{

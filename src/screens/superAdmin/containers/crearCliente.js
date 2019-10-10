@@ -2,100 +2,70 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, TextInput, ScrollView, Button, ActivityIndicator } from 'react-native';
 import CabeceraCrearUsuario from '../../general/componentes/cabeceraCrudSuperAdmin'
 import { Picker, Label } from "native-base";
-import { Icon } from 'react-native-elements'
-import { consultaClientes } from '../../../servicios/serviciosSuperAdmin/crudClientes';
-import { crearUsuario_ } from '../../../servicios/serviciosSuperAdmin/crudUsuarios'
+import { Icon } from 'react-native-elements';
+import { crearCliente } from '../../../servicios/serviciosSuperAdmin/crudClientes';
 
 class crearUsuario extends Component {
     constructor(props) {
 
         super(props);
         this.state = {
-            cliente: null,
-            rol: null,
+            nombreEmpresa: '',
             tipoDocumento: '',
             numeroDocumento: '',
-            nombreCompleto: '',
             email: '',
             telefono: '',
-            contrasena: '',
-            isLoading: false,
-            datos: ['india', 'brasil', 'colombia']
         };
     }
 
-    componentDidMount() {
-        consultaClientes().then(
-            res => {
-                this.setState({
-                    isLoading: false,
-                    data: res.data,
-                })
-                //this.listaCliente();
-            }).catch(
-                err => {
-                    alert(err)
-                }
-            )
-    }
-
-
-    listaCliente = () => {
-        // return (this.state.data.map((x, i, y) => {
-        //     return (<Picker.Item label={x.name} key={i} value={y.id} />)
-        // }));
-        return (this.state.datos.map((x, i) => {
-            return (<Picker.Item label={x} key={i} value={x} />)
-        }));
-    }
 
 
     guardarCliente = () => {
-        // crearUsuario_(this.state.tipoDocumento, 
-        //     this.state.numeroDocumento, 
-        //     this.state.nombreCompleto,
-        //     this.state.email,
-        //     this.state.telefono,
-        //     this.state.contrasena,
-        //     this.state.rol);
-        this.props.navigation.navigate('crudClientes')
+        crearCliente(this.state.tipoDocumento,
+                    this.state.numeroDocumento,
+                    this.state.nombreEmpresa,
+                    this.state.telefono,
+                    this.state.email).then(
+                        res=>{
+                            alert(res)
+                        }
+                    ).catch(
+                        erro=>{
+                            alert(erro)
+                        }
+                    )
+
+        //this.props.navigation.navigate('crudClientes')
 
     }
 
     render() {
-
-        if (this.state.isLoading) {
-            return (
-                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                    <ActivityIndicator />
-                </View>
-            )
-        }
         return (
             <ScrollView>
                 <View >
                     <CabeceraCrearUsuario titulo='Crear cliente' />
                     <View style={styles.contenedorCliente}>
                         <Label>Nombre de la empresa</Label>
+                        <TextInput style={styles.textInput} placeholder='ingresa datos' onChangeText={ne => this.setState({ nombreEmpresa: ne })} />
+                        <Label>Tipo documento</Label>
                         <Picker
                             mode="dropdown"
-                            selectedValue={this.state.cliente}
-                            onValueChange={(value) => (this.setState({ cliente: value }))}>
-                            {this.listaCliente()}
+                            selectedValue={this.state.tipoDocumento}
+                            onValueChange={(value) => (this.setState({ tipoDocumento: value }))}>
+                            <Picker.Item label="Nit" value="1" />
+                            <Picker.Item label="Rut" value="2" />
                         </Picker>
-                        <Label>Tipo documento</Label>
-                        <TextInput style={styles.textInput} placeholder='ingresa datos' onChangeText={td => this.setState({ tipoDocumento: td })} />
                         <Label>Numero documento</Label>
-                        <TextInput style={styles.textInput} keyboardType={'numeric'} placeholder='ingresa datos' onChangeText={nd => this.setState({ numeroDocumento: nd })} />
+                        <TextInput style={styles.textInput} placeholder='ingresa datos' onChangeText={nd => this.setState({ numeroDocumento: nd })} />
                     </View>
                     <View style={styles.contenedorDatosUsuario}>
                         <View style={styles.contenedorCliente}>
                             <Text style={styles.texto1}>Datos de contacto</Text>
-                            <Text style={{marginBottom:15}}>Completa los datos del cliente</Text>
+                            <Text style={{ marginBottom: 15 }}>Completa los datos del cliente</Text>
                             <Label>Email</Label>
                             <TextInput style={styles.textInput} placeholder='ingresa datos' onChangeText={em => this.setState({ email: em })} />
-                            <Label>Telefono Movil</Label>
-                            <TextInput style={styles.textInput} keyboardType={'numeric'} placeholder='ingresa datos' onChangeText={tm => this.setState({ telefono: tm })} />
+                            <Label>Telefono </Label>
+                            <TextInput style={styles.textInput} keyboardType={'numeric'} placeholder='ingresa datos' onChangeText={te => this.setState({ telefono: te })} />
                             <View style={{ marginVertical: 10 }}>
                                 <Button title='Guardar cliente' color='#ff5a06' onPress={this.guardarCliente} />
                             </View>

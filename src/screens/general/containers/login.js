@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, ImageBackground, View, Image } from 'react-native'
+import { StyleSheet, ImageBackground, View, Image, AsyncStorage } from 'react-native';
 import { Card, CardItem, Text, Body, Button, Item, Input } from 'native-base';
 import { login } from '../../../servicios/generales/login'
 
@@ -26,15 +26,30 @@ export default class AnatomyExample extends Component {
         // }
         login(this.state.email, this.state.password).then(
             (res) => {
-                if (res.data.userId === 2) {
-                    this.props.navigation.navigate('inicioUsuario')
+
+                if (res.data.ResponseMessage.role_id === 2) {
+                    AsyncStorage.setItem('token', res.data.ResponseMessage.access_token).then(
+                        res => {
+                            this.setState({ email: '', password: '' })
+                            this.props.navigation.navigate('inicioUsuario')
+                        }).catch(
+                            erro => {
+                                alert('errorGuardanco')
+                            }
+                        )
                 }
-                else if (res.data.userId === 1) {
-                    this.setState({ email: '', password: ''})
-                    this.props.navigation.navigate('inicioSuperAdmin')
-                    
+                else if (res.data.ResponseMessage.role_id === 1) {
+                    AsyncStorage.setItem('token', res.data.ResponseMessage.access_token).then(
+                        res => {
+                            this.setState({ email: '', password: '' })
+                            this.props.navigation.navigate('inicioSuperAdmin')
+                        }).catch(
+                            erro => {
+                                alert('errorGuardanco')
+                            }
+                        )
                 }
-                else if (res.data.userId === 3) {
+                else if (res.data.ResponseMessage.role_id === 3) {
                     this.props.navigation.navigate('inicioAdmin')
                 }
                 else {
@@ -61,15 +76,15 @@ export default class AnatomyExample extends Component {
                         </CardItem>
                         <CardItem >
                             <Body>
-                                <Item rounded style={{marginBottom: '5%', paddingStart: 8, backgroundColor: this.state.inputEmail}}>
+                                <Item rounded style={{ marginBottom: '5%', paddingStart: 8, backgroundColor: this.state.inputEmail }}>
                                     <Input placeholder='Email'
                                         onChangeText={valueEmail => this.setState({ email: valueEmail })}
                                         value={this.state.email}
                                     />
                                 </Item>
-                                <Item rounded rounded style={{marginBottom: '5%', paddingStart: 8, backgroundColor: this.state.inputEmail}}>
+                                <Item rounded rounded style={{ marginBottom: '5%', paddingStart: 8, backgroundColor: this.state.inputEmail }}>
                                     <Input placeholder='Contraseña'
-                                        onChangeText={valuePassowrd => this.setState({ password: valuePassowrd})}
+                                        onChangeText={valuePassowrd => this.setState({ password: valuePassowrd })}
                                         value={this.state.password}
                                     />
                                 </Item>

@@ -1,104 +1,68 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TextInput, ScrollView, Button, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, TextInput, ScrollView, Button, Alert, AsyncStorage} from 'react-native';
 import CabeceraCrearUsuario from '../../general/componentes/cabeceraCrudSuperAdmin'
 import { Picker, Label } from "native-base";
 import { Icon } from 'react-native-elements'
-import { consultaClientes } from '../../../servicios/serviciosSuperAdmin/crudClientes';
-import { crearUsuario_ } from '../../../servicios/serviciosSuperAdmin/crudUsuarios'
+import { guardarCurso } from  '../../../servicios/serviciosSuperAdmin/crudCursos'
 
 class crearUsuario extends Component {
     constructor(props) {
 
         super(props);
         this.state = {
-            cliente: null,
-            rol: null,
-            tipoDocumento: '',
-            numeroDocumento: '',
-            nombreCompleto: '',
-            email: '',
-            telefono: '',
-            contrasena: '',
-            isLoading: false,
-            datos: ['india', 'brasil', 'colombia']
+            nombreCurso: '',
+            descripcion: '',
+            estado: ''
+
         };
     }
 
-    componentDidMount() {
-        consultaClientes().then(
-            res => {
-                this.setState({
-                    isLoading: false,
-                    data: res.data,
-                })
-                //this.listaCliente();
+    guardarCurso = () => {
+        AsyncStorage.getItem('token').then(
+            (res)=>{
+                let config = { headers: { Authorization: 'Bearer ' + res } }
+                guardarCurso(this.state.nombreCurso, this.state.descripcion, this.state.estado, config).then(
+                    res => { 
+                      Alert.alert('Curso', 'creado con exito', [{text: 'Ok'}]);
+                      this.props.navigation.navigate('crudCursos')
+                  }).catch(
+                      erro=> {
+                          alert(erro)
+                      }
+                  )
             }).catch(
-                err => {
-                    alert(err)
+                (erro)=>{
+                    alert(erro)
                 }
             )
-    }
 
 
-    listaCliente = () => {
-        // return (this.state.data.map((x, i, y) => {
-        //     return (<Picker.Item label={x.name} key={i} value={y.id} />)
-        // }));
-        return (this.state.datos.map((x, i) => {
-            return (<Picker.Item label={x} key={i} value={x} />)
-        }));
-    }
-
-
-    guardarCurso = () => {
-        // crearUsuario_(this.state.tipoDocumento, 
-        //     this.state.numeroDocumento, 
-        //     this.state.nombreCompleto,
-        //     this.state.email,
-        //     this.state.telefono,
-        //     this.state.contrasena,
-        //     this.state.rol);
-        this.props.navigation.navigate('crudCursos')
+        
 
     }
 
     render() {
 
-        if (this.state.isLoading) {
-            return (
-                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                    <ActivityIndicator />
-                </View>
-            )
-        }
         return (
             <ScrollView>
                 <View >
                     <CabeceraCrearUsuario titulo='Crear curso' />
                     <View style={styles.contenedorCliente}>
-                        <Label>Nombre de la empresa</Label>
+                        <Label>Nombre del curso</Label>
+                        <TextInput style={styles.textInput} placeholder='ingresa datos' onChangeText={nc => this.setState({ nombreCurso: nc })} />
+                        <Label>Descripcion</Label>
+                        <TextInput style={styles.textInput} placeholder='ingresa datos' onChangeText={des => this.setState({ descripcion: des })} />
+                        <Label>Estado</Label>
                         <Picker
                             mode="dropdown"
-                            selectedValue={this.state.cliente}
-                            onValueChange={(value) => (this.setState({ cliente: value }))}>
-                            {this.listaCliente()}
+                            selectedValue={this.state.estado}
+                            onValueChange={(value) => (this.setState({ estado: value }))}>
+                            <Picker.Item label="Activo" value="1" />
+                            <Picker.Item label="En proceso" value="2" />
+                            <Picker.Item label="Inactivo" value="3" />
                         </Picker>
-                        <Label>Tipo documento</Label>
-                        <TextInput style={styles.textInput} placeholder='ingresa datos' onChangeText={td => this.setState({ tipoDocumento: td })} />
-                        <Label>Numero documento</Label>
-                        <TextInput style={styles.textInput} keyboardType={'numeric'} placeholder='ingresa datos' onChangeText={nd => this.setState({ numeroDocumento: nd })} />
-                    </View>
-                    <View style={styles.contenedorDatosUsuario}>
-                        <View style={styles.contenedorCliente}>
-                            <Text style={styles.texto1}>Datos de contacto</Text>
-                            <Text style={{marginBottom:15}}>Completa los datos del cliente</Text>
-                            <Label>Email</Label>
-                            <TextInput style={styles.textInput} placeholder='ingresa datos' onChangeText={em => this.setState({ email: em })} />
-                            <Label>Telefono Movil</Label>
-                            <TextInput style={styles.textInput} keyboardType={'numeric'} placeholder='ingresa datos' onChangeText={tm => this.setState({ telefono: tm })} />
-                            <View style={{ marginVertical: 10 }}>
-                                <Button title='Guardar cliente' color='#ff5a06' onPress={this.guardarCliente} />
-                            </View>
+                        <View style={{ marginVertical: 10 }}>
+                                <Button  title='Guardar' color='#ff5a06' onPress={this.guardarCurso} />
                         </View>
                     </View>
                     <View style={styles.contenedorPie}>
@@ -127,13 +91,6 @@ export default crearUsuario;
 const styles = StyleSheet.create({
     contenedorCliente: {
         padding: 30
-    },
-    texto1: {
-        fontSize: 20,
-        fontWeight: 'bold',
-    },
-    contenedorDatosUsuario: {
-        backgroundColor: '#F7F7F7'
     },
     textInput: {
         borderWidth: 1,

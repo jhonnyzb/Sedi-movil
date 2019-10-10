@@ -3,7 +3,7 @@ const axios = require('axios');
 export function login(email, password ) {
     let usuario = {
         email: email,
-        passowrd: password
+        password: password
     }
-    return axios.get('https://jsonplaceholder.typicode.com/todos/1')
+    return axios.post('http://10.131.10.33/api/login', usuario)
 }
