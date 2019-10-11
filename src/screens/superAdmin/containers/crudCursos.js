@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, FlatList, AsyncStorage } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator, FlatList, AsyncStorage, ScrollView } from 'react-native';
 import { consultaCursosAdmin, eliminarCurso } from '../../../servicios/serviciosSuperAdmin/crudCursos';
 import { Icon } from 'react-native-elements'
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import Footer from '../../general/componentes/footer'
 
 
 
@@ -43,31 +44,10 @@ class crudCursos extends Component {
         this.props.navigation.navigate('crearCursos')
     }
 
-    detalleCurso = (data) => {
-        alert(data)
+    editarCurso = (idCurso, nombreCurso, descripcionCurso) => {
+        this.props.navigation.navigate('editarCursos', { idCurso: idCurso, nombreCurso: nombreCurso, descripcionCurso: descripcionCurso })
     }
 
-    editarCurso = (data) => {
-        alert(data)
-    }
-
-
-    eliminarCurso = (idClase) => {
-        AsyncStorage.getItem('token').then(
-            (res) => {
-                //let config = { headers: { Authorization: 'Bearer ' + res } }
-                eliminarCurso(idClase, res).then(
-                    res => {
-                        alert(JSON.stringify(res))
-                    }).catch(
-                        erro => {
-                            alert(JSON.stringify(erro))
-                        })
-            }).catch(
-                (erro) => {
-                    alert('error asyn')
-                })
-    }
 
 
 
@@ -77,10 +57,9 @@ class crudCursos extends Component {
                 borderWidth: 1,
                 backgroundColor: '#95F79C',
                 borderRadius: 7,
-                padding: 5,
                 borderColor: '#95F79C',
-                paddingLeft: 8,
-                paddingRight: 8
+                width: '90%',
+                textAlign: 'center'
             }}> Activo </Text>;
         }
         else if (estado === 2) {
@@ -88,10 +67,9 @@ class crudCursos extends Component {
                 borderWidth: 1,
                 backgroundColor: '#E3E3E3',
                 borderRadius: 7,
-                padding: 5,
                 borderColor: '#E3E3E3',
-                paddingLeft: 8,
-                paddingRight: 8
+                width: '90%',
+                textAlign: 'center'
             }}> Inactivo </Text>;
         }
         else if (estado === 3) {
@@ -99,10 +77,9 @@ class crudCursos extends Component {
                 borderWidth: 1,
                 backgroundColor: '#FCFEFC',
                 borderRadius: 7,
-                padding: 5,
                 borderColor: '#FCFEFC',
-                paddingLeft: 8,
-                paddingRight: 8
+                width: '90%',
+                textAlign: 'center'
             }}> Aprobado </Text>;
         }
         else if (estado === 4) {
@@ -110,10 +87,9 @@ class crudCursos extends Component {
                 borderWidth: 1,
                 backgroundColor: '#FB8989',
                 borderRadius: 7,
-                padding: 5,
                 borderColor: '#FB8989',
-                paddingLeft: 8,
-                paddingRight: 8
+                width: '90%',
+                textAlign: 'center'
             }}> Reprobado </Text>;
         }
         else if (estado === 5) {
@@ -121,11 +97,20 @@ class crudCursos extends Component {
                 borderWidth: 1,
                 backgroundColor: '#8B89FB',
                 borderRadius: 7,
-                padding: 5,
                 borderColor: '#8B89FB',
-                paddingLeft: 8,
-                paddingRight: 8
+                width: '90%',
+                textAlign: 'center'
             }}> Concluido </Text>;
+        }
+        else if (estado === 7) {
+            return <Text style={{
+                borderWidth: 1,
+                backgroundColor: '#6E99FD',
+                borderRadius: 7,
+                borderColor: '#6E99FD',
+                width: '90%',
+                textAlign: 'center'
+            }}> En proceso </Text>;
         }
     }
 
@@ -134,19 +119,19 @@ class crudCursos extends Component {
     cursos(item, index) {
         //const { id, name, description, rating } = item.item;
         return (
-            <TouchableOpacity onPress={() => { this.edicion }}>
+            <TouchableOpacity onPress={() => { this.editarCurso(item.id, item.name, item.description) }}>
                 <View style={styles.listado}>
-                    <View style={{flexDirection: 'row', justifyContent: 'flex-start'}} >
+                    <View style={{ flexDirection: 'row', justifyContent: 'flex-start', width: '45%' }} >
                         <Text style={styles.indices} >
                             {index + 1}
                         </Text>
-                        <Text style={{ marginLeft:'7%'}}>
+                        <Text style={{ marginLeft: '7%' }}>
                             {item.name}
                         </Text>
                     </View>
-                    <View style={{flexDirection:'row', justifyContent: 'flex-end'}}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'flex-end', width: '40%' }}>
                         {this.activoInactivo(item.status_id)}
-                        <Icon color="#ff5a06" name="arrow-right" type="font-awesome" size={16} containerStyle={{marginHorizontal: '2%'}} />
+                        <Icon color="#ff5a06" name="keyboard-arrow-right" type="material" size={16} containerStyle={{ marginLeft: '12%' }} />
                     </View>
                 </View>
             </TouchableOpacity>
@@ -165,24 +150,32 @@ class crudCursos extends Component {
 
 
         return (
-            <View style={styles.container}>
-                <Text style={styles.texto1}>Listado de cursos</Text>
-                <Text style={styles.texto2}>Aca podras Ver, Editar Y crear Cursos</Text>
-                <TouchableOpacity onPress={this.crearCursos} >
-                    <View style={styles.bCrearCurso}>
-                        <Text style={{ color: 'white' }}>Crea un Curso</Text>
-                        <Icon color="white" name="arrow-right" type="font-awesome" size={16} />
+            <ScrollView>
+                <View>
+                    <View style={styles.container}>
+                        <Text style={styles.texto1}>Listado de cursos</Text>
+                        <Text style={styles.texto2}>Aca podras Ver, Editar Y crear Cursos</Text>
+                        <TouchableOpacity onPress={this.crearCursos} >
+                            <View style={styles.bCrearCurso}>
+                                <Text style={{ color: 'white' }}>Crea un Curso</Text>
+                                <Icon color="white" name="arrow-right" type="font-awesome" size={16} />
+                            </View>
+                        </TouchableOpacity>
+                        <View style={{ flex: 1, flexDirection: 'row', marginTop: 10 }}>
+                            <FlatList
+                                data={this.state.data}
+                                renderItem={({ item, index }) => this.cursos(item, index)}   //{this.cursos.bind(this)}
+                                keyExtractor={(item, index) => index.toString()}
+                                extraData={this.state}
+                            />
+                        </View>
                     </View>
-                </TouchableOpacity>
-                <View style={{ flex: 1, flexDirection: 'row', marginTop: 10 }}>
-                    <FlatList
-                        data={this.state.data}
-                        renderItem={({ item, index }) => this.cursos(item, index)}   //{this.cursos.bind(this)}
-                        keyExtractor={(item, index) => index.toString()}
-                        extraData={this.state}
-                    />
+                    <View>
+                        <Footer/>
+                    </View>
+
                 </View>
-            </View>
+            </ScrollView>
         );
     }
 }
@@ -215,7 +208,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         borderBottomWidth: 1,
         marginBottom: '5%',
-        borderBottomColor: '#F8F8F8',
+        borderBottomColor: '#CCCCD1',
         alignItems: 'center',
         justifyContent: 'space-between',
         height: 60,
@@ -223,10 +216,10 @@ const styles = StyleSheet.create({
     },
     indices: {
         borderWidth: 1,
-        backgroundColor: '#F8F8F8',
+        backgroundColor: '#CCCCD1',
         borderRadius: 7,
         padding: 5,
-        borderColor: '#F8F8F8',
+        borderColor: '#CCCCD1',
         paddingLeft: 8,
         paddingRight: 8,
     }

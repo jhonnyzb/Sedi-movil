@@ -4,7 +4,7 @@ import CabeceraCrearUsuario from '../../general/componentes/cabeceraCrudSuperAdm
 import { Picker, Label } from "native-base";
 import { Icon } from 'react-native-elements'
 import { consultaClientes } from '../../../servicios/serviciosSuperAdmin/crudClientes';
-import { crearUsuario_ } from '../../../servicios/serviciosSuperAdmin/crudUsuarios'
+import Footer from '../../general/componentes/footer'
 
 class crearUsuario extends Component {
     constructor(props) {
@@ -98,20 +98,7 @@ class crearUsuario extends Component {
                             </View>
                         </View>
                     </View>
-                    <View style={styles.contenedorPie}>
-                        <Text style={styles.textoPie} >
-                            Lorem ipsum dolor sit amet consectetur adipiscing elit cubilia vivamus inceptos a, fermentum leo aliquet blandit mus suscipit semper cursus maecenas varius eu dis
-                        </Text>
-                        <View style={{ flexDirection: 'row' }}>
-                            <Icon name='facebook-official' type='font-awesome' color='#fff' size={20} containerStyle={{ marginHorizontal: 14 }} />
-                            <Icon name='instagram' type='font-awesome' color='#fff' size={20} containerStyle={{ marginHorizontal: 14 }} />
-                            <Icon name='twitter' type='font-awesome' color='#fff' size={20} containerStyle={{ marginHorizontal: 14 }} />
-                        </View>
-                        <View style={{ flexDirection: 'row', marginBottom: '5%', marginTop: '5%' }}>
-                            <Text style={styles.textoPoliticas}>Politicas de privacidad |</Text>
-                            <Text style={styles.textoPoliticas} >| Terminos y condiciones</Text>
-                        </View>
-                    </View>
+                    <Footer/>
                 </View>
             </ScrollView>
 
@@ -139,22 +126,6 @@ const styles = StyleSheet.create({
         padding: 5,
         borderColor: '#F7F7F7',
         marginBottom: 10
-    },
-    contenedorPie: {
-        backgroundColor: '#343434',
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 40
-    },
-    textoPie: {
-        color: 'white',
-        textAlign: 'center',
-        marginBottom: '5%'
-    },
-    textoPoliticas: {
-        color: 'white',
-        fontSize: 10,
-        padding: '2%'
-    },
+    }
 
 })
