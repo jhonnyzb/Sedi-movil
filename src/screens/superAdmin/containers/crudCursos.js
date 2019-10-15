@@ -20,25 +20,40 @@ class crudCursos extends Component {
 
 
     componentDidMount() {
-        AsyncStorage.getItem('token').then(
-            (res) => {
-                let config = { headers: { Authorization: 'Bearer ' + res } }
-                consultaCursosAdmin(config).then(
-                    (res) => {
-                        this.setState({
-                            isLoading: false,
-                            data: res.data,
-                        })
-                    }
-                ).catch(
-                    (erro) => { alert(erro) }
-                )
-            }).catch(
-                (erro) => {
-                    alert('error asyn')
-                })
+        const { navigation } = this.props;
+        this.pantallaCrudCursosEntrada = navigation.addListener('didFocus', () => {
+            AsyncStorage.getItem('token').then(
+                (res) => {
+                    let config = { headers: { Authorization: 'Bearer ' + res } }
+                    consultaCursosAdmin(config).then(
+                        (res) => {
+                            this.setState({
+                                isLoading: false,
+                                data: res.data,
+                            })
+                        }
+                    ).catch(
+                        (erro) => { alert(erro) }
+                    )
+                }).catch(
+                    (erro) => {
+                        alert('error asyn')
+                    })
 
+        });
+
+
+        this.pantallaCrudCursosSalida =navigation.addListener(
+            'didBlur',
+            () => {
+                this.setState({isLoading: true})
+            }
+          );
     }
+
+
+
+
 
     crearCursos = () => {
         this.props.navigation.navigate('crearCursos')
@@ -171,13 +186,23 @@ class crudCursos extends Component {
                         </View>
                     </View>
                     <View>
-                        <Footer/>
+                        <Footer />
                     </View>
 
                 </View>
             </ScrollView>
         );
     }
+
+
+    componentWillUnmount() {
+        //remover suscripciones a pantallas
+        this.pantallaCrudCursosEntrada.remove();
+        this.pantallaCrudCursosSalida.remove();
+    }
+
+
+
 }
 
 export default crudCursos;

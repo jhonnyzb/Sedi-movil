@@ -1,7 +1,7 @@
 import React from 'react';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
-import { Image,Text, StyleSheet } from 'react-native'
+import { Image, Text, StyleSheet } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 //rutas
@@ -13,10 +13,13 @@ import crudClientes from './screens/superAdmin/containers/crudClientes';
 import crudLicencias from './screens/superAdmin/containers/crudLicencias';
 import crudCursos from './screens/superAdmin/containers/crudCursos';
 import crearUsuarios from './screens/superAdmin/containers/crearUsuario';
-import editarCursos from './screens/superAdmin/containers/editarCurso'
+import editarCursos from './screens/superAdmin/containers/editarCurso';
+import editarModulos from './screens/superAdmin/containers/editarModulo';
+import crearModulos from './screens/superAdmin/containers/crearModulo'
 import crearClientes from './screens/superAdmin/containers/crearCliente';
 import crearLicencias from './screens/superAdmin/containers/crearLicencia';
 import crearCursos from './screens/superAdmin/containers/crearCurso';
+import crearSeccion from './screens/superAdmin/containers/crearSeccion'
 import inicioAdmin from './screens/admin/containers/inicioAdmin';
 import busquedaCursosUsuario from './screens/usuario/containers/busquedaCursosUsuario'
 
@@ -35,9 +38,9 @@ class LogoTitle extends React.Component {
 class BotonBarra extends React.Component {
     render() {
         return (
-            
-            <TouchableOpacity onPress={() => alert('This is a button!')} style = {styles.btnBarra}>
-                <Text  style={styles.texto} >@Usuario{"\n"}3000pts</Text> 
+
+            <TouchableOpacity onPress={() => alert('This is a button!')} style={styles.btnBarra}>
+                <Text style={styles.texto} >@Usuario{"\n"}3000pts</Text>
                 <Image
                     source={require('./assets/img/usuario.png')}
                     style={styles.imgUsuario}
@@ -67,7 +70,7 @@ const Navegacion = createStackNavigator({
 
         },
     },
-    
+
     busquedaCursosUsuario: {
         screen: busquedaCursosUsuario,
         navigationOptions: {
@@ -191,6 +194,39 @@ const Navegacion = createStackNavigator({
             headerRight: <BotonBarra />
         }
     },
+    editarModulos: {
+        screen: editarModulos,
+        navigationOptions: {
+            headerTitle: <LogoTitle />,
+            headerStyle: {
+                backgroundColor: '#343434'
+            },
+            headerTintColor: '#ff5a06',
+            headerRight: <BotonBarra />
+        }
+    },
+    crearModulos: {
+        screen: crearModulos,
+        navigationOptions: {
+            headerTitle: <LogoTitle />,
+            headerStyle: {
+                backgroundColor: '#343434'
+            },
+            headerTintColor: '#ff5a06',
+            headerRight: <BotonBarra />
+        }
+    },
+    crearSeccion: {
+        screen: crearSeccion,
+        navigationOptions: {
+            headerTitle: <LogoTitle />,
+            headerStyle: {
+                backgroundColor: '#343434'
+            },
+            headerTintColor: '#ff5a06',
+            headerRight: <BotonBarra />
+        }
+    },
 
     inicioAdmin: {
         screen: inicioAdmin,
@@ -213,12 +249,12 @@ const styles = StyleSheet.create({
         height: '60%',
         marginLeft: '25%'
     },
-    btnBarra :{
+    btnBarra: {
         flex: 1,
         marginTop: 12,
         flexDirection: 'row'
     },
-    texto:{
+    texto: {
         fontSize: 10,
         color: '#ffff'
     },
@@ -227,10 +263,10 @@ const styles = StyleSheet.create({
         height: 30,
         borderRadius: 30,
         borderColor: '#ff5a06',
-        borderWidth: 1, 
-        marginRight: 10, 
-        marginLeft:3
+        borderWidth: 1,
+        marginRight: 10,
+        marginLeft: 3
     }
 
-    
+
 })

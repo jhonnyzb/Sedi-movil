@@ -22,25 +22,38 @@ class editarCurso extends Component {
 
 
     componentDidMount() {
-        AsyncStorage.getItem('token').then(
-            (res) => {
-                const { navigation } = this.props;
-                this.setState({ idCurso: navigation.getParam('idCurso', 'error'), nombreCurso: navigation.getParam('nombreCurso', 'error'), descripcionCurso:navigation.getParam('descripcionCurso', 'error') })
-                let config = { headers: { Authorization: 'Bearer ' + res } }
-                consultaCursosDetalles(this.state.idCurso, config).then(
-                    (res) => {
-                        this.setState({
-                            isLoading: false,
-                            data: res.data[0].modules,
-                        })
-                    }
-                ).catch(
-                    (erro) => { alert(erro) }
-                )
-            }).catch(
-                (erro) => {
-                    alert('error asyn')
-                })
+        const { navigation } = this.props;
+        this.pantallaEditarCursosEntrada = navigation.addListener('didFocus',()=>{
+            AsyncStorage.getItem('token').then(
+                (res) => {
+                    const { navigation } = this.props;
+                    this.setState({ idCurso: navigation.getParam('idCurso', 'error'), nombreCurso: navigation.getParam('nombreCurso', 'error'), descripcionCurso:navigation.getParam('descripcionCurso', 'error') })
+                    let config = { headers: { Authorization: 'Bearer ' + res } }
+                    consultaCursosDetalles(this.state.idCurso, config).then(
+                        (res) => {
+                            this.setState({
+                                isLoading: false,
+                                data: res.data[0].modules,
+                            })
+                        }
+                    ).catch(
+                        (erro) => { alert(erro) }
+                    )
+                }).catch(
+                    (erro) => {
+                        alert('error asyn')
+                    })
+
+        });
+
+
+        this.pantallaEditarCursosSalida =navigation.addListener(
+            'didBlur',
+            () => {
+                this.setState({isLoading: true})
+            }
+          );
+        
     }
 
 
@@ -60,15 +73,24 @@ class editarCurso extends Component {
                 })
     }
 
+    crearModulo = () =>{
+        this.props.navigation.navigate('crearModulos',{ idCurso: this.state.idCurso })
+    }
+
+    editarmodulo = (modulo) =>{
+        this.props.navigation.navigate('editarModulos', { moduloEditar:modulo })
+    }
+
+
+
     modulosSeccionesInterno(item, index) {
         //const { id, name, description, rating } = item.item;
         return (
             <TouchableOpacity>
                 <View style={styles.ContenedorSecciones}>
-                    <View style={{width: '65%'}}>
+                    <View style={{alignItems:'center', justifyContent: 'center'}}>
                         <Text>{item.name}</Text>
                     </View>
-                    <Icon name='pencil' color='#ff5a06' type='font-awesome' size={16} containerStyle={{ marginHorizontal: '5%' }} />
                 </View>
             </TouchableOpacity>
         )
@@ -86,7 +108,7 @@ class editarCurso extends Component {
                         <Text style={styles.texto1} >{item.name}</Text>
                         <Text style={styles.descripcionModulo} >{item.description}</Text>
                     </View>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => { this.editarmodulo(item) }}>
                         <View style={{ justifyContent: 'flex-end' }}>
                             <View style={{ flexDirection: 'row', backgroundColor: '#ff5a06', borderRadius: 5, padding: 10, justifyContent: 'space-between' }}>
                                 <Text style={{ color: 'white' }}>Editar modulo</Text>
@@ -168,6 +190,15 @@ class editarCurso extends Component {
 
         );
     }
+
+
+
+    componentWillUnmount() {
+        //remover suscripciones a pantallas
+        this.pantallaEditarCursosEntrada.remove();
+        this.pantallaEditarCursosSalida.remove();
+    }
+
 }
 
 export default editarCurso;

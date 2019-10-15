@@ -23,6 +23,30 @@ export function guardarCurso(nombreCurso, descripcion, header) {
     return axios.post('http://10.131.10.33/superAdmin/createClass', curso, header)
 }
 
+export function crearModulo_(idCurso, name, descripcion, orden, header) {
+    let modulo = {
+        classId:idCurso,
+        name:name,
+        order:orden,
+        description: descripcion
+    }
+    return axios.post('http://10.131.10.33/superAdmin/createModule', modulo, header)
+}
+
+
+
+export function guardarSeccion(nombreSeccion, idModulo, orden, descripcion, urlVideo, tipoArchivo, header) {
+    let seccion = {
+        name:nombreSeccion,
+        moduleId:idModulo,
+        order: orden,
+        description: descripcion,
+        fileValue: urlVideo,
+        fyleTypeId: Number(tipoArchivo) 
+    }
+    alert(JSON.stringify(seccion))
+    return axios.post('http://10.131.10.33/superAdmin/createSection', seccion, header)
+}
 
 
 export function eliminarCurso(cursoId, header) {
