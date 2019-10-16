@@ -78,25 +78,8 @@ class editarCurso extends Component {
     }
 
     editarmodulo = (modulo) =>{
-        this.props.navigation.navigate('editarModulos', { moduloEditar:modulo })
+        this.props.navigation.navigate('editarModulos', { moduloEditar:modulo, banderahttp: 1 })
     }
-
-
-
-    modulosSeccionesInterno(item, index) {
-        //const { id, name, description, rating } = item.item;
-        return (
-            <TouchableOpacity>
-                <View style={styles.ContenedorSecciones}>
-                    <View style={{alignItems:'center', justifyContent: 'center'}}>
-                        <Text>{item.name}</Text>
-                    </View>
-                </View>
-            </TouchableOpacity>
-        )
-    }
-
-
 
 
     modulosSecciones(item, index) {
@@ -117,12 +100,6 @@ class editarCurso extends Component {
                         </View>
                     </TouchableOpacity>
                 </View>
-                <FlatList
-                    data={item.sections}
-                    renderItem={({ item, index }) => this.modulosSeccionesInterno(item, index)}   //{this.cursos.bind(this)}
-                    keyExtractor={(item, index) => index.toString()}
-                    extraData={this.state}
-                />
             </View>
         )
     }
@@ -172,7 +149,7 @@ class editarCurso extends Component {
                     <View style={styles.modulosSecciones}>
                         <View style={styles.ContenedorModuloSecciones}>
                             <Text style={styles.texto1}>
-                                Módulos y secciones
+                                Módulos
                                 </Text>
                             <View style={{ flex: 1, flexDirection: 'row' }}>
                                 <FlatList

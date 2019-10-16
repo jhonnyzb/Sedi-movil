@@ -19,7 +19,9 @@ import crearModulos from './screens/superAdmin/containers/crearModulo'
 import crearClientes from './screens/superAdmin/containers/crearCliente';
 import crearLicencias from './screens/superAdmin/containers/crearLicencia';
 import crearCursos from './screens/superAdmin/containers/crearCurso';
-import crearSeccion from './screens/superAdmin/containers/crearSeccion'
+import crearSeccion from './screens/superAdmin/containers/crearSeccion';
+import crearQuiz from './screens/superAdmin/containers/crearQuiz'
+import editarSeccion from './screens/superAdmin/containers/editarSeccion';
 import inicioAdmin from './screens/admin/containers/inicioAdmin';
 import busquedaCursosUsuario from './screens/usuario/containers/busquedaCursosUsuario'
 
@@ -218,6 +220,28 @@ const Navegacion = createStackNavigator({
     },
     crearSeccion: {
         screen: crearSeccion,
+        navigationOptions: {
+            headerTitle: <LogoTitle />,
+            headerStyle: {
+                backgroundColor: '#343434'
+            },
+            headerTintColor: '#ff5a06',
+            headerRight: <BotonBarra />
+        }
+    },
+    editarSeccion: {
+        screen: editarSeccion,
+        navigationOptions: {
+            headerTitle: <LogoTitle />,
+            headerStyle: {
+                backgroundColor: '#343434'
+            },
+            headerTintColor: '#ff5a06',
+            headerRight: <BotonBarra />
+        }
+    },
+    crearQuiz: {
+        screen: crearQuiz,
         navigationOptions: {
             headerTitle: <LogoTitle />,
             headerStyle: {

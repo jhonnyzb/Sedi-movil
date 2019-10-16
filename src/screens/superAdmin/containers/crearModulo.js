@@ -21,7 +21,7 @@ class crearModulo extends Component {
                 let config = { headers: { Authorization: 'Bearer ' + res } }
                 crearModulo_(this.props.navigation.getParam('idCurso', 'no-id'),this.state.nombreModulo,  this.state.descripcion, this.state.orden, config).then(
                     res => {
-                        //Alert.alert('Curso', 'Modulo creado con exito', [{ text: 'Ok' }]);
+                        Alert.alert('Curso', 'Modulo creado con exito', [{ text: 'Ok' }]);
                         this.props.navigation.navigate('editarCursos')
                     }).catch(
                         erro => {

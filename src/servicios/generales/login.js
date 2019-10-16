@@ -1,3 +1,4 @@
+import { url_base } from '../../config/configuraciones';
 const axios = require('axios');
  
 export function login(email, password ) {
@@ -5,5 +6,5 @@ export function login(email, password ) {
         email: email,
         password: password
     }
-    return axios.post('http://10.131.10.33/api/login', usuario)
+    return axios.post( url_base + '/api/login', usuario)
 }

@@ -11,33 +11,33 @@ class crearSeccion extends Component {
         this.state = {
             nombreSeccion: '',
             orden: '',
-            descripcion:'',
+            descripcion: '',
             urlVideo: '',
             tipoArchivo: ''
 
         };
     }
 
-guardarSeccion=() =>{
-    const { navigation } = this.props;
-    AsyncStorage.getItem('token').then(
-        (res) => {
-            let config = { headers: { Authorization: 'Bearer ' + res } }
-            guardarSeccion(this.state.nombreSeccion, navigation.getParam('idModulo', ''),this.state.orden,this.state.descripcion, this.state.urlVideo, this.state.tipoArchivo, config).then(
-                res => {
-                    //alert(JSON.stringify(res));
-                    this.props.navigation.navigate('editarModulos')
-                }).catch(
-                    erro => {
-                        alert(erro)
-                    }
-                )
-        }).catch(
-            (erro) => {
-                alert(erro)
-            }
-        )
-}
+    guardarSeccion = () => {
+        const { navigation } = this.props;
+        AsyncStorage.getItem('token').then(
+            (res) => {
+                let config = { headers: { Authorization: 'Bearer ' + res } }
+                guardarSeccion(this.state.nombreSeccion, navigation.getParam('idModulo', ''), this.state.orden, this.state.descripcion, this.state.urlVideo, this.state.tipoArchivo, config).then(
+                    res => {
+                        alert('Seccion creada exitosa');
+                        this.props.navigation.navigate('editarModulos', { banderahttp: 2})
+                    }).catch(
+                        erro => {
+                            alert(erro)
+                        }
+                    )
+            }).catch(
+                (erro) => {
+                    alert(erro)
+                }
+            )
+    }
 
 
 
@@ -75,7 +75,7 @@ guardarSeccion=() =>{
                     <Text>Tipo de archivo</Text>
                     <Picker
                         selectedValue={this.state.tipoArchivo}
-                        style={{ height: 50, width: '100%', backgroundColor: '#DEDEE0', marginBottom:'3%' }}
+                        style={{ height: 50, width: '100%', backgroundColor: '#DEDEE0', marginBottom: '3%' }}
                         onValueChange={(itemValue, itemIndex) =>
                             this.setState({ tipoArchivo: itemValue })
                         }>
@@ -83,13 +83,13 @@ guardarSeccion=() =>{
                         <Picker.Item label="Pdf" value="2" />
                     </Picker>
                     <Text>Url Video</Text>
-                    <TextInput style={styles.textInput} onChangeText={uv => this.setState({ urlVideo: uv })}/>
-                    <View style={{ marginVertical: 10 }}>
-                            <Button title='Guardar Seccion' color='#ff5a06' onPress={this.guardarSeccion} />
-                        </View>
+                    <TextInput style={styles.textInput} onChangeText={uv => this.setState({ urlVideo: uv })} />
+                    <TouchableOpacity onPress={this.guardarSeccion} style={{marginVertical: 10, alignItems:'center',  backgroundColor: '#ff5a06', borderRadius: 5, padding: 8}} >
+                           <Text style={{color: 'white'}} >Guardar seccion</Text>                     
+                    </TouchableOpacity>
                 </View>
                 <View>
-                        <Footer/>
+                    <Footer />
                 </View>
             </ScrollView>
 

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, Button, TouchableOpacity, View, TextInput } from 'react-native';
+import { StyleSheet, Text, Button, TouchableOpacity, View, TextInput, AsyncStorage } from 'react-native';
+import { consultarSecciones} from '../../../servicios/serviciosSuperAdmin/crudCursos'
 import DraggableFlatList from 'react-native-draggable-flatlist'
 import { Icon } from 'react-native-elements'
 import Modal from "react-native-modal";
@@ -27,8 +28,42 @@ class nosotros extends Component {
     // }
 
     componentDidMount() {
-        let secciones = this.props.navigation.getParam('moduloEditar', 'NO-ID')
-        this.setState({ data: secciones.sections, nombreModulo: secciones.name, descripcion: secciones.description, idModulo: secciones.id })
+        this.pantallaEditarModuloEntrada = this.props.navigation.addListener('didFocus', ()=>{
+            let secciones = this.props.navigation.getParam('moduloEditar', 'NO-ID')
+            let bandera = this.props.navigation.getParam('banderahttp', '')
+            if (bandera === 1) {
+                this.setState({ data: secciones.sections, nombreModulo: secciones.name, descripcion: secciones.description, idModulo: secciones.id })
+            }
+            if (bandera === 2) {
+                AsyncStorage.getItem('token').then(
+                    (res) => {
+                        let config = { headers: { Authorization: 'Bearer ' + res } }
+                        consultarSecciones(config).then(
+                            res => {
+                                let arraysecciones = []
+                                for (var i = 0, max = res.data.length; i < max; i += 1) {
+                                    if (res.data[i].module_id === secciones.id) {
+                                        let seccion = {
+                                            id: res.data[i].id,
+                                            module_id: res.data[i].module_id,
+                                            name: res.data[i].name
+                                        }
+                                        arraysecciones.push(seccion);
+                                    }       
+                                }
+                                this.setState({ data: arraysecciones, nombreModulo: secciones.name, descripcion: secciones.description, idModulo: secciones.id })
+                            }).catch(
+                                erro => {
+                                    alert(JSON.stringify(erro))
+                                })
+                    }).catch(
+                        (erro) => {
+                            alert('error asyn')
+                        })
+                
+            }
+
+        })
 
     }
 
@@ -39,6 +74,14 @@ class nosotros extends Component {
     editarNombre = () => {
         this.setState({ isModalVisible: !this.state.isModalVisible });
     };
+
+    editarSeccion = (idseccion) =>{
+        this.props.navigation.navigate('editarSeccion', { idSeccion: idseccion, idModulo: this.state.idModulo })
+    }
+
+    crearQuiz =()=>{
+        this.props.navigation.navigate('crearQuiz', { idModulo: this.state.idModulo, idQuiz: 2 })
+    }
 
 
     renderItem = ({ item, index, move, moveEnd }) => {
@@ -57,7 +100,7 @@ class nosotros extends Component {
                 }}
                 onLongPress={move}
                 onPressOut={moveEnd}
-            //onPress = {() => this.editar({idseccion: item.key, orden:index + 1})}
+                onPress = {() => this.editarSeccion(item.id)}
             >
                 <Text style={{ fontWeight: 'bold', color: 'black', fontSize: 15, }}>{item.name}</Text>
                 <Icon name='pencil' color='#ff5a06' type='font-awesome' />
@@ -74,6 +117,8 @@ class nosotros extends Component {
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                     <TouchableOpacity onPress={this.editarNombre} >
                         <Text style={{ fontSize: 18, fontWeight: 'bold' }} >Editar Modulo </Text>
+                        <Text style={{ color: '#D2D2D3' }} >{this.state.nombreModulo} </Text>
+                        <Text style={{ color: '#D2D2D3' }} >{this.state.descripcion}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity>
                         <Icon name='trash' color='red' type='font-awesome' />
@@ -84,7 +129,7 @@ class nosotros extends Component {
                     <TouchableOpacity style={styles.bcrearNuevaSeccion} onPress={this.crearSeccion}>
                         <Text style={{ color: 'white' }}>Crea nueva seccion</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.bcrearQuiz}>
+                    <TouchableOpacity style={styles.bcrearQuiz} onPress={()=>{this.crearQuiz()}} >
                         <Text style={{ color: 'white' }}>Crear Quiz</Text>
                     </TouchableOpacity>
                 </View>
@@ -123,7 +168,7 @@ class nosotros extends Component {
 
 
     componentWillUnmount() {
-
+        this.pantallaEditarModuloEntrada.remove();
     }
 
 }
