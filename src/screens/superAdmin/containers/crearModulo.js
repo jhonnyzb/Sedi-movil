@@ -11,7 +11,7 @@ class crearModulo extends Component {
         this.state = {
             nombreModulo: '',
             descripcion: '',
-            orden:''
+            orden:'1'
         };
     }
 

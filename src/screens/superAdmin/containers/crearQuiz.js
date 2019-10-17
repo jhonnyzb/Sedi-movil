@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Picker, ActivityIndicator, AsyncStorage, TextInput, ScrollView, TouchableOpacity, Button} from 'react-native';
+import { StyleSheet, Text, View, Picker, ActivityIndicator, AsyncStorage, TextInput, ScrollView, TouchableOpacity, Button } from 'react-native';
 import CabeceraQuiz from '../../general/componentes/cabeceraCrudSuperAdmin'
-import { obtenerMetodologias } from '../../../servicios/serviciosSuperAdmin/crudCursos'
+import { obtenerMetodologias, guardarMetodologia, guardarQuiz } from '../../../servicios/serviciosSuperAdmin/crudCursos'
 import Modal from "react-native-modal";
 import Footer from '../../general/componentes/footer'
 
@@ -10,15 +10,58 @@ class crearQuiz extends Component {
         super(props);
         this.state = {
             tipoCalificacion: '',
+            descripcion: '',
             metodologias: '',
             isLoading: true,
             isModalVisible: false,
+            nombreMetodologia: '',
+            valorMaximoMetodologia: '',
+            valorMinimoMetodologia: ''
         };
     }
 
 
 
     componentDidMount() {
+        this.consultaMetodologias();
+    }
+
+
+
+    listaMetodologias = () => {
+        return (this.state.metodologias.map((x, i) => {
+            return (<Picker.Item label={x.name} key={i} value={x.id} />)
+        }));
+    }
+
+    guardarMetodologiaNueva = () => {
+        if (this.state.nombreMetodologia === '') {
+            return
+        }
+        if (this.state.valorMaximoMetodologia === '') {
+            return
+        }
+        this.setState({ isModalVisible: false });
+        AsyncStorage.getItem('token').then(
+            (res) => {
+                let config = { headers: { Authorization: 'Bearer ' + res } }
+                guardarMetodologia(this.state.nombreMetodologia, this.state.valorMaximoMetodologia, config).then(
+                    res => {
+                        this.setState({ nombreMetodologia: '', valorMaximoMetodologia: '' })
+                        this.consultaMetodologias();
+                    }).catch(
+                        erro => {
+                            alert('Error Guardando Metodologia')
+                        }
+                    )
+            }).catch(
+                (erro) => {
+                    alert(erro)
+                })
+    }
+
+
+    consultaMetodologias = () => {
         AsyncStorage.getItem('token').then(
             (res) => {
                 let config = { headers: { Authorization: 'Bearer ' + res } }
@@ -36,16 +79,33 @@ class crearQuiz extends Component {
     }
 
 
-
-    listaMetodologias = () => {
-        return (this.state.metodologias.map((x, i) => {
-            return (<Picker.Item label={x.name} key={i} value={x.id} />)
-        }));
+    crearQuiz = () => {
+        AsyncStorage.getItem('token').then(
+            (res) => {
+                let config = { headers: { Authorization: 'Bearer ' + res } }
+                guardarQuiz(this.state.tipoCalificacion ,this.props.navigation.getParam('idQuiz', ''), this.props.navigation.getParam('idModulo', ''),  this.state.valorMinimoMetodologia, this.state.descripcion, config).then(
+                    res => {
+                        this.props.navigation.navigate('preguntasRespuestas', { idExamen: res.data.ResponseMessage.id} )
+                    }).catch(
+                        erro => {
+                            alert('Error Creando Quiz')
+                        }
+                    )
+            }).catch(
+                (erro) => {
+                    alert(erro)
+                })
     }
 
-    metodologiaNueva = () => {
-        this.setState({ isModalVisible: !this.state.isModalVisible });
+
+
+    abrirModalMetodologiaNueva = () => {
+        this.setState({ isModalVisible: true });
     };
+
+    cerrarModalMetodologiaNueva = () => {
+        this.setState({ isModalVisible: false });
+    }
 
     render() {
         if (this.state.isLoading) {
@@ -74,15 +134,15 @@ class crearQuiz extends Component {
                                 }>
                                 {this.listaMetodologias()}
                             </Picker>
-                            <TouchableOpacity style={styles.agregarNuevaMetodologia} onPress={this.metodologiaNueva} >
+                            <TouchableOpacity style={styles.agregarNuevaMetodologia} onPress={this.abrirModalMetodologiaNueva} >
                                 <Text style={{ color: 'white' }}>Agregar Metodologia</Text>
                             </TouchableOpacity>
                         </View>
                         <Text>Descripcion</Text>
-                        <TextInput style={styles.textInput} multiline={true} numberOfLines={3} />
-                        <Text>Valor minimo de aprobacion</Text>
-                        <TextInput style={styles.textInput} keyboardType={'numeric'} />
-                        <TouchableOpacity style={styles.bAgregarQuiz}>
+                        <TextInput style={styles.textInput} multiline={true} numberOfLines={3} onChangeText={des => this.setState({ descripcion: des })}/>
+                        <Text>Valor minimo para aprobar</Text>
+                        <TextInput style={styles.textInput} keyboardType={'numeric'} onChangeText={valor => this.setState({ valorMinimoMetodologia: valor })} />
+                        <TouchableOpacity style={styles.bAgregarQuiz} onPress={this.crearQuiz} >
                             <Text style={{ color: 'white' }}>Crear Quiz</Text>
                         </TouchableOpacity>
                     </View>
@@ -90,17 +150,20 @@ class crearQuiz extends Component {
                     <View>
                         <Modal isVisible={this.state.isModalVisible}>
                             <View style={{ backgroundColor: 'white', borderRadius: 5, padding: 15, }}>
-                                <Text>Nombre Modulo</Text>
+                                <Text>Nombre Metodologia</Text>
                                 <TextInput style={styles.textInput}
-                                    onChangeText={nm => this.setState({ nombreModulo: nm })}
+                                    onChangeText={nm => this.setState({ nombreMetodologia: nm })}
                                     value={this.state.nombreModulo} />
-                                <Text>Descripcion</Text>
+                                <Text>Valor Maximo Calificacion</Text>
                                 <TextInput style={styles.textInput}
-                                    multiline={true}
-                                    numberOfLines={3}
-                                    onChangeText={des => this.setState({ descripcion: des })}
+                                    keyboardType={'numeric'}
+                                    onChangeText={valor => this.setState({ valorMaximoMetodologia: valor })}
                                     value={this.state.descripcion} />
-                                <Button title="Guardar metodologia" color='#ff5a06' onPress={this.metodologiaNueva} />
+                                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                    <Button title="Guardar metodologia" color='#ff5a06' onPress={this.guardarMetodologiaNueva} />
+                                    <Button title="Cerrar" color='#ff5a06' onPress={this.cerrarModalMetodologiaNueva} />
+                                </View>
+
                             </View>
                         </Modal>
                     </View>

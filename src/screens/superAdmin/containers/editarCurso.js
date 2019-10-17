@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity, TextInput, Button, AsyncStorage, ActivityIndicator, FlatList } from 'react-native';
-import { eliminarCurso, consultaCursosDetalles } from '../../../servicios/serviciosSuperAdmin/crudCursos';
+import { eliminarCurso, consultaCursosDetalles, editarCurso_ } from '../../../servicios/serviciosSuperAdmin/crudCursos';
 import { Label } from "native-base";
 import { Icon } from 'react-native-elements'
 import Footer from '../../general/componentes/footer'
@@ -55,6 +55,27 @@ class editarCurso extends Component {
           );
         
     }
+
+
+    actualizarCurso = () => {
+        AsyncStorage.getItem('token').then(
+            (res) => {
+                let config = { headers: { Authorization: 'Bearer ' + res } }
+                 editarCurso_(this.state.nombreCurso, this.state.descripcionCurso, this.state.idCurso, config).then(
+                    res => {
+                        alert('Curso Actualizado')
+                        this.props.navigation.navigate('crudCursos')
+                    }).catch(
+                        erro => {
+                            alert(JSON.stringify(erro))
+                        })
+            }).catch(
+                (erro) => {
+                    alert('error asyn')
+                })
+
+    };
+
 
 
     eliminarCurso = () => {
@@ -117,7 +138,6 @@ class editarCurso extends Component {
             )
         }
 
-
         return (
             <ScrollView>
                 <View>
@@ -143,7 +163,7 @@ class editarCurso extends Component {
                             onChangeText={des => this.setState({ descripcionCurso: des })} 
                             value={this.state.descripcionCurso}/>
                         <View style={{ marginVertical: 10 }}>
-                            <Button title='Guardar' color='#ff5a06' onPress={this.guardarCurso} />
+                            <Button title='Actualizar Curso' color='#ff5a06' onPress={this.actualizarCurso} />
                         </View>
                     </View>
                     <View style={styles.modulosSecciones}>

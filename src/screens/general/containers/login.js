@@ -18,12 +18,12 @@ export default class AnatomyExample extends Component {
 
 
     login = () => {
-        // if (this.state.email === '') {
-        //     return
-        // }
-        // if (this.state.password === '') {
-        //     return
-        // }
+        if (this.state.email === '') {
+            return
+        }
+        if (this.state.password === '') {
+            return
+        }
         login(this.state.email, this.state.password).then(
             (res) => {
 

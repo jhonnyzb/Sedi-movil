@@ -60,6 +60,7 @@ class editarSeccion extends Component {
                 let config = { headers: { Authorization: 'Bearer ' + res } }
                 actualizarSeccion(this.state.nombreSeccion, this.props.navigation.getParam('idModulo', ''), 4, this.state.descripcion, this.props.navigation.getParam('idSeccion', ''), config).then(
                     res => {
+                        alert('Seccion actualizada')
                         this.props.navigation.navigate('editarModulos', { banderahttp: 2 })
                     }).catch(
                         erro => {

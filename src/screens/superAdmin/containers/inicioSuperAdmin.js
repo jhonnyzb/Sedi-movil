@@ -24,19 +24,19 @@ export default class inicioUsuario extends Component {
         return (
             <View style={styles.container}>
                 <Text style={styles.texto1}>Crea un recurso</Text>
-                <TouchableOpacity onPress = {this.crudUsuarios} >
+                <TouchableOpacity onPress = {this.crudUsuarios} disabled={true} >
                     <View style={styles.bcrearUsuario}>
                         <Text style={styles.textoBcrearUsuario}>Crear Usuario</Text>
                         <Icon color="white" name="arrow-right" type="font-awesome" size={16} />
                     </View>
                 </TouchableOpacity>
-                <TouchableOpacity onPress = {this.crudClientes} >
+                <TouchableOpacity onPress = {this.crudClientes} disabled={true} >
                     <View style={styles.bcrearUsuario}>
                         <Text style={styles.textoBcrearUsuario}>Crear cliente</Text>
                         <Icon color="white" name="arrow-right" type="font-awesome" size={16} />
                     </View>
                 </TouchableOpacity>
-                <TouchableOpacity onPress = {this.crudLicencias} >
+                <TouchableOpacity onPress = {this.crudLicencias} disabled={true} >
                     <View style={styles.bcrearUsuario}>
                         <Text style={styles.textoBcrearUsuario}>Crear licencia</Text>
                         <Icon color="white" name="arrow-right" type="font-awesome" size={16} />

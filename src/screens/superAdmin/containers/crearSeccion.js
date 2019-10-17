@@ -10,10 +10,10 @@ class crearSeccion extends Component {
         super(props);
         this.state = {
             nombreSeccion: '',
-            orden: '',
+            orden: '1',
             descripcion: '',
             urlVideo: '',
-            tipoArchivo: ''
+            tipoArchivo: '1'
 
         };
     }

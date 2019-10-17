@@ -3,7 +3,7 @@ const axios = require('axios');
 
 
 export function consultaCursosAdmin(header) {
-    return axios.get( url_base + '/superAdmin/getClass', header)
+    return axios.get(url_base + '/superAdmin/getClass', header)
 
 }
 
@@ -11,10 +11,9 @@ export function consultaCursosDetalles(idCurso, header) {
     let idCursoObjeto = {
         "classId": idCurso
     }
-    return axios.post( url_base + '/admin/classDetail', idCursoObjeto, header)
+    return axios.post(url_base + '/admin/classDetail', idCursoObjeto, header)
 
 }
-
 
 export function guardarCurso(nombreCurso, descripcion, header) {
     let curso = {
@@ -24,51 +23,83 @@ export function guardarCurso(nombreCurso, descripcion, header) {
     return axios.post(url_base + '/superAdmin/createClass', curso, header)
 }
 
+
+export function editarCurso_(nombreCurso, descripcion, idCurso, header) {
+    let curso = {
+        className: nombreCurso,
+        description: descripcion,
+        classId: idCurso
+    }
+    return axios.put(url_base + '/superAdmin/updateClass', curso, header)
+
+}
+
 export function crearModulo_(idCurso, name, descripcion, orden, header) {
     let modulo = {
-        classId:idCurso,
-        name:name,
-        order:orden,
+        classId: idCurso,
+        name: name,
+        order: orden,
         description: descripcion
     }
-    return axios.post( url_base + '/superAdmin/createModule', modulo, header)
+    return axios.post(url_base + '/superAdmin/createModule', modulo, header)
 }
+
+export function actualizarModulo(IdCurso, NombreModulo, descripcion, ordenModulo, idModulo, header) {
+    let modulo = {
+        classId: IdCurso,
+        name: NombreModulo,
+        description: descripcion,
+        order: ordenModulo,
+        moduleId: idModulo
+    }
+    return axios.put(url_base + '/superAdmin/updateModule', modulo, header)
+
+}
+
+
+export function eliminarModulo(IdModulo, token) {
+
+    return axios.delete(url_base + '/superAdmin/deleteModule', { headers: { Authorization: 'Bearer ' + token }, data: { moduleId: IdModulo } })
+
+}
+
+
+
 
 export function guardarSeccion(nombreSeccion, idModulo, orden, descripcion, urlVideo, tipoArchivo, header) {
     let seccion = {
-        name:nombreSeccion,
+        name: nombreSeccion,
         moduleId: Number(idModulo),
-        order: Number(orden) ,
+        order: Number(orden),
         description: descripcion,
         fileValue: urlVideo,
-        fileTypeId: Number(tipoArchivo) 
+        fileTypeId: Number(tipoArchivo)
     }
-    //alert(JSON.stringify(seccion))
-    return axios.post( url_base + '/superAdmin/createSection', seccion, header)
+    return axios.post(url_base + '/superAdmin/createSection', seccion, header)
 }
 
 export function consultarSecciones(header) {
-    
-    return axios.get( url_base + '/superAdmin/getSection', header)
+
+    return axios.get(url_base + '/superAdmin/getSection', header)
 
 }
 
 export function consultarSeccionIndividual(idseccion, header) {
-    
-    
-    return axios.post( url_base + '/superAdmin/showSection',{sectionId: idseccion}, header)
+
+
+    return axios.post(url_base + '/superAdmin/showSection', { sectionId: idseccion }, header)
 
 }
 
-export function actualizarSeccion(nombreSeccion,idModulo, orden, descripcion,idseccion, header) {
-    let seccion ={
+export function actualizarSeccion(nombreSeccion, idModulo, orden, descripcion, idseccion, header) {
+    let seccion = {
         name: nombreSeccion,
-        moduleId:idModulo,
-        order:orden,
-        description:descripcion,
+        moduleId: idModulo,
+        order: orden,
+        description: descripcion,
         sectionId: idseccion
     }
-    return axios.put( url_base + '/superAdmin/updateSection',seccion, header)
+    return axios.put(url_base + '/superAdmin/updateSection', seccion, header)
 
 }
 
@@ -87,7 +118,26 @@ export function eliminarCurso(cursoId, header) {
 
 
 export function obtenerMetodologias(header) {
-    
-    return axios.get( url_base + '/superAdmin/getMethodology', header)
 
+    return axios.get(url_base + '/superAdmin/getMethodology', header)
+
+}
+
+export function guardarMetodologia(nombreMetodologia, valorMaximoMetodologia, header) {
+    let metodologia = {
+        name: nombreMetodologia,
+        maxValue: valorMaximoMetodologia
+    }
+    return axios.post(url_base + '/superAdmin/createMethodology', metodologia, header)
+}
+
+export function guardarQuiz(tipoMetodologia, idTipo, idModulo, minimoValorRequerido, descripcion, header) {
+    let quiz = {
+        methodologyId:tipoMetodologia,
+        typeId:idTipo,
+        moduleId:idModulo,
+        minValueRequired: minimoValorRequerido,
+        description: descripcion
+    }
+    return axios.post(url_base + '/superAdmin/createExam', quiz, header)
 }
