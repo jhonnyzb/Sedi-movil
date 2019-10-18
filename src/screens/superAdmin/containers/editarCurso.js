@@ -37,7 +37,9 @@ class editarCurso extends Component {
                             })
                         }
                     ).catch(
-                        (erro) => { alert(erro) }
+                        (erro) => { 
+                            alert(erro) 
+                        }
                     )
                 }).catch(
                     (erro) => {

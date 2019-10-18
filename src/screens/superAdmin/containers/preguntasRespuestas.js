@@ -5,7 +5,15 @@ import { StyleSheet, Text, View, TextInput } from 'react-native';
 class preguntasRespuestas extends Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            preguntas: [
+                {
+                    pregunta: '',
+                    pesoPregunta: '',
+                    respuestas:[]
+                }
+            ]
+        };
     }
     render() {
         return (

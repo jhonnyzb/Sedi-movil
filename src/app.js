@@ -15,6 +15,7 @@ import crudCursos from './screens/superAdmin/containers/crudCursos';
 import crearUsuarios from './screens/superAdmin/containers/crearUsuario';
 import editarCursos from './screens/superAdmin/containers/editarCurso';
 import editarModulos from './screens/superAdmin/containers/editarModulo';
+import editarClientes from './screens/superAdmin/containers/editarCliente';
 import crearModulos from './screens/superAdmin/containers/crearModulo'
 import crearClientes from './screens/superAdmin/containers/crearCliente';
 import crearLicencias from './screens/superAdmin/containers/crearLicencia';
@@ -155,6 +156,17 @@ const Navegacion = createStackNavigator({
     },
     crearClientes: {
         screen: crearClientes,
+        navigationOptions: {
+            headerTitle: <LogoTitle />,
+            headerStyle: {
+                backgroundColor: '#343434'
+            },
+            headerTintColor: '#ff5a06',
+            headerRight: <BotonBarra />
+        }
+    },
+    editarClientes: {
+        screen: editarClientes,
         navigationOptions: {
             headerTitle: <LogoTitle />,
             headerStyle: {

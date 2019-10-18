@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TextInput, ScrollView, Button, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, TextInput, ScrollView, Alert, AsyncStorage } from 'react-native';
 import CabeceraCrearUsuario from '../../general/componentes/cabeceraCrudSuperAdmin'
 import { Picker, Label } from "native-base";
 import { crearCliente } from '../../../servicios/serviciosSuperAdmin/crudClientes';
 import Footer from '../../general/componentes/footer'
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 class crearUsuario extends Component {
     constructor(props) {
@@ -11,7 +12,7 @@ class crearUsuario extends Component {
         super(props);
         this.state = {
             nombreEmpresa: '',
-            tipoDocumento: '',
+            tipoDocumento: '1',
             numeroDocumento: '',
             email: '',
             telefono: '',
@@ -21,22 +22,23 @@ class crearUsuario extends Component {
 
 
     guardarCliente = () => {
-        crearCliente(this.state.tipoDocumento,
-                    this.state.numeroDocumento,
-                    this.state.nombreEmpresa,
-                    this.state.telefono,
-                    this.state.email).then(
-                        res=>{
-                            alert(res)
-                        }
-                    ).catch(
-                        erro=>{
-                            alert(erro)
-                        }
-                    )
-
-        //this.props.navigation.navigate('crudClientes')
-
+        AsyncStorage.getItem('token').then(
+            (res)=>{
+                let config = { headers: { Authorization: 'Bearer ' + res } }
+                crearCliente(this.state.tipoDocumento, this.state.numeroDocumento,this.state.nombreEmpresa,this.state.telefono,this.state.email, config).then(
+                    res => { 
+                      Alert.alert('Cliente', 'creado con exito', [{text: 'Ok'}]);
+                      this.props.navigation.navigate('crudClientes')
+                  }).catch(
+                      erro=> {
+                          alert(erro)
+                      }
+                  )
+            }).catch(
+                (erro)=>{
+                    alert(erro)
+                }
+            )
     }
 
     render() {
@@ -52,8 +54,13 @@ class crearUsuario extends Component {
                             mode="dropdown"
                             selectedValue={this.state.tipoDocumento}
                             onValueChange={(value) => (this.setState({ tipoDocumento: value }))}>
-                            <Picker.Item label="Nit" value="1" />
-                            <Picker.Item label="Rut" value="2" />
+                            <Picker.Item label="CC" value="1" />
+                            <Picker.Item label="CE" value="2" />
+                            <Picker.Item label="Nit" value="3" />
+                            <Picker.Item label="Pasaporte" value="4" />
+                            <Picker.Item label="Permiso Especial" value="5" />
+                            <Picker.Item label="RUT" value="6" />
+                            <Picker.Item label="TI" value="7" />
                         </Picker>
                         <Label>Numero documento</Label>
                         <TextInput style={styles.textInput} placeholder='ingresa datos' onChangeText={nd => this.setState({ numeroDocumento: nd })} />
@@ -66,9 +73,10 @@ class crearUsuario extends Component {
                             <TextInput style={styles.textInput} placeholder='ingresa datos' onChangeText={em => this.setState({ email: em })} />
                             <Label>Telefono </Label>
                             <TextInput style={styles.textInput} keyboardType={'numeric'} placeholder='ingresa datos' onChangeText={te => this.setState({ telefono: te })} />
-                            <View style={{ marginVertical: 10 }}>
-                                <Button title='Guardar cliente' color='#ff5a06' onPress={this.guardarCliente} />
-                            </View>
+                            <TouchableOpacity style={styles.bGuardarCliente} onPress={this.guardarCliente}>
+                                <Text style={{color: 'white'}} >Guardar cliente</Text>
+                            </TouchableOpacity>
+                           
                         </View>
                     </View>
                     <Footer/>
@@ -99,6 +107,13 @@ const styles = StyleSheet.create({
         padding: 5,
         borderColor: '#F7F7F7',
         marginBottom: 10
+    },
+    bGuardarCliente:{
+        backgroundColor: '#ff5a06',
+        borderRadius: 5,
+        alignItems: 'center',
+        paddingVertical: '3%'
+
     }
 
 })
