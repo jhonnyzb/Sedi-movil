@@ -80,7 +80,6 @@ class crearQuiz extends Component {
 
 
     crearQuiz = () => {
-        //this.props.navigation.navigate('preguntasRespuestas', { idExamen: 25} )
         if (this.state.tipoCalificacion === '') {
             alert('seleccione tipo de calificacion')
             return

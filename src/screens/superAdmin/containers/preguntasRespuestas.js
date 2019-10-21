@@ -9,7 +9,6 @@ import { Icon } from 'react-native-elements'
 class index extends Component {
     constructor(props) {
         super(props);
-        this.con = 0
         this.state = {
             colorIcon: 'black',
             colorbotonCorrecto: 'gray',
@@ -81,7 +80,6 @@ class index extends Component {
                     res => {
                         alert('pregunta Guardada')
                         this.setState({ pregunta: '', peso: '', respuestas: []})
-                        this.con = this.con + 1 
                     }).catch(
                         erro => {
                             alert('Error Creando Quiz')
@@ -153,7 +151,7 @@ class index extends Component {
         if (this.state.respuestas.length === 0) {
             return <View style={{ justifyContent: 'center', alignItems: 'center', height: '70%' }}>
                 <Icon name='info-circle' type='font-awesome' color='red' size={100} />
-                <Text>Usted ha generado { contador} preguntas para este modulo</Text>
+                <Text>Usted no ha generado preguntas para este modulo</Text>
             </View>
         }
     }
