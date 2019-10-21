@@ -80,6 +80,19 @@ class crearQuiz extends Component {
 
 
     crearQuiz = () => {
+        //this.props.navigation.navigate('preguntasRespuestas', { idExamen: 25} )
+        if (this.state.tipoCalificacion === '') {
+            alert('seleccione tipo de calificacion')
+            return
+        }
+        if (this.state.valorMinimoMetodologia === '') {
+            alert('seleccione minimo de calificacion')
+            return
+        }
+        if (this.state.descripcion === '') {
+            alert('Agregue una descripcion')
+            return
+        }
         AsyncStorage.getItem('token').then(
             (res) => {
                 let config = { headers: { Authorization: 'Bearer ' + res } }

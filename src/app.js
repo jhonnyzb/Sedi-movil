@@ -23,6 +23,7 @@ import crearCursos from './screens/superAdmin/containers/crearCurso';
 import crearSeccion from './screens/superAdmin/containers/crearSeccion';
 import crearQuiz from './screens/superAdmin/containers/crearQuiz'
 import preguntasRespuestas from './screens/superAdmin/containers/preguntasRespuestas';
+import cuestionarioDetalles from './screens/superAdmin/containers/cuestionarioDetail';
 import editarSeccion from './screens/superAdmin/containers/editarSeccion';
 import inicioAdmin from './screens/admin/containers/inicioAdmin';
 import busquedaCursosUsuario from './screens/usuario/containers/busquedaCursosUsuario'
@@ -266,6 +267,17 @@ const Navegacion = createStackNavigator({
     },
     preguntasRespuestas: {
         screen: preguntasRespuestas,
+        navigationOptions: {
+            headerTitle: <LogoTitle />,
+            headerStyle: {
+                backgroundColor: '#343434'
+            },
+            headerTintColor: '#ff5a06',
+            headerRight: <BotonBarra />
+        }
+    },
+    cuestionarioDetalles: {
+        screen: cuestionarioDetalles,
         navigationOptions: {
             headerTitle: <LogoTitle />,
             headerStyle: {

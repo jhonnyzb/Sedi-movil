@@ -141,3 +141,26 @@ export function guardarQuiz(tipoMetodologia, idTipo, idModulo, minimoValorRequer
     }
     return axios.post(url_base + '/superAdmin/createExam', quiz, header)
 }
+
+export function guardarPreguntasQuiz(idExamen, pregunta, peso, respuestas, header) {
+    let preguntaQuiz = {
+        examId:idExamen,
+        description:pregunta,
+        quantity:peso,
+        answers: respuestas
+    }
+    return axios.post(url_base + '/superAdmin/createQuestionAnswers', preguntaQuiz, header)
+}
+
+export function obtenerCuestionario(idExamen,header) {
+    let cuestionario = {
+        examId:idExamen, 
+    }
+    return axios.post(url_base + '/user/detailExam', cuestionario, header)
+}
+
+export function eliminarPregunta(idPregunta, header) {
+
+    return axios.delete(url_base + '/superAdmin/deleteQuestion', { headers: { Authorization: 'Bearer ' + header }, data: { questionId: idPregunta } })
+
+}
