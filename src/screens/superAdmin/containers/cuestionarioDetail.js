@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, FlatList, ActivityIndicator, ScrollView, TouchableOpacity, AsyncStorage } from 'react-native';
+import { StyleSheet, Text, View, FlatList, ActivityIndicator, Alert, TouchableOpacity, AsyncStorage, TextInput, Button } from 'react-native';
 import { obtenerCuestionario, eliminarPregunta } from '../../../servicios/serviciosSuperAdmin/crudCursos'
 import { Icon } from 'react-native-elements'
 
@@ -9,27 +9,16 @@ class cuestionarioDetail extends Component {
         super(props);
         this.state = {
             isLoading: true,
-            examen: []
+            examen: [],
+            preguntaActualizada: '',
+            pesoActualizado: '',
+            isModalVisible: false,
         };
     }
 
 
     componentDidMount() {
-        const { navigation } = this.props
-        AsyncStorage.getItem('token').then(
-            (res) => {
-                let config = { headers: { Authorization: 'Bearer ' + res } }
-                obtenerCuestionario(navigation.getParam('idExamen', ''), config).then(
-                    (res) => {
-                        this.setState({ examen: res.data.ResponseMessage[0], isLoading: false, })
-                    }
-                ).catch(
-                    (err) => {
-                        alert(err)
-                    }
-                )
-            })
-
+        this.metodoObtenerCuestionario();
     }
 
 
@@ -53,12 +42,35 @@ class cuestionarioDetail extends Component {
         alert(id)
     }
 
+    abrirModal = (visible) => {
+       this.setState({ isModalVisible: visible })
+    }
+
+
+
     eliminarPregunta = (id) => {
+        Alert.alert(
+            ' Seguro de eliminar ',
+            ' La pregunta ?',
+            [
+                { text: 'Si', onPress: () => this.metodoEliminar(id) },
+                { text: 'No', onPress: () => console.log('Presiono No') }
+            ],
+            { cancelable: false },
+        );
+        return true;
+
+    }
+
+
+
+    metodoEliminar = (id) => {
         AsyncStorage.getItem('token').then(
             (res) => {
                 eliminarPregunta(id, res).then(
                     res => {
-                        alert('Pregunta eliminada')
+                        console.log('Pregunta eliminada')
+                        this.metodoObtenerCuestionario();
                     }).catch(
                         erro => {
                             alert(JSON.stringify(erro))
@@ -68,6 +80,28 @@ class cuestionarioDetail extends Component {
                     alert('error asyn')
                 })
     }
+
+
+
+    metodoObtenerCuestionario = () => {
+        const { navigation } = this.props
+        AsyncStorage.getItem('token').then(
+            (res) => {
+                let config = { headers: { Authorization: 'Bearer ' + res } }
+                obtenerCuestionario(navigation.getParam('idExamen', ''), config).then(
+                    (res) => {
+                        this.setState({ examen: res.data.ResponseMessage[0], isLoading: false, })
+                    }
+                ).catch(
+                    (err) => {
+                        alert(err)
+                    }
+                )
+            })
+    }
+
+
+
 
     respuestas(item, index) {
         const { value, correct, id } = item;
@@ -93,7 +127,7 @@ class cuestionarioDetail extends Component {
 
 
     preguntas(item, index) {
-        const { description, id } = item;
+        const { description, id, quantity } = item;
         return (
             <View >
                 <View style={styles.view1} >
@@ -113,8 +147,7 @@ class cuestionarioDetail extends Component {
                         renderItem={({ item, index }) => this.respuestas(item, index)}
                         keyExtractor={(item, index) => index.toString()}
                     />
-                </View>
-
+                </View>              
             </View>
         )
     }
@@ -170,11 +203,12 @@ const styles = StyleSheet.create({
     },
     view2: {
         flexDirection: 'row',
-        width: '90%'
+        width: '85%'
     },
     view3: {
+        justifyContent: 'space-around',
         alignItems: 'center',
-        width: '10%'
+        width: '15%'
     },
     view4: {
         flexDirection: 'row',
@@ -201,7 +235,8 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         alignItems: 'center',
         paddingBottom: 8,
-        paddingTop: 8
+        paddingTop: 8,
+        marginBottom: '3%'
 
     }
 })

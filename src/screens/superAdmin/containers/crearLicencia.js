@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TextInput, ScrollView, Button, ActivityIndicator } from 'react-native';
-import CabeceraCrearUsuario from '../../general/componentes/cabeceraCrudSuperAdmin'
-import { Picker, Label } from "native-base";
+import { View, Text, StyleSheet, TextInput, ScrollView, Button, ActivityIndicator, AsyncStorage, Picker } from 'react-native';
+import CabeceraCrearLicencia from '../../general/componentes/cabeceraCrudSuperAdmin'
+import { Label } from "native-base";
 import { Icon } from 'react-native-elements'
 import { consultaClientes } from '../../../servicios/serviciosSuperAdmin/crudClientes';
 import Footer from '../../general/componentes/footer'
@@ -11,59 +11,51 @@ class crearUsuario extends Component {
 
         super(props);
         this.state = {
-            cliente: null,
-            rol: null,
-            tipoDocumento: '',
-            numeroDocumento: '',
-            nombreCompleto: '',
-            email: '',
-            telefono: '',
-            contrasena: '',
-            isLoading: false,
-            datos: ['india', 'brasil', 'colombia']
+            cliente: '',
+            numeroUsuarios: '',
+            precio: '',
+            periodo: '',
+            isLoading: true,
+            data: ''
         };
     }
 
     componentDidMount() {
-        consultaClientes().then(
-            res => {
-                this.setState({
-                    isLoading: false,
-                    data: res.data,
-                })
-                //this.listaCliente();
+        AsyncStorage.getItem('token').then(
+            (res) => {
+                let config = { headers: { Authorization: 'Bearer ' + res } }
+                consultaClientes(config).then(
+                    (res) => {
+                        this.setState({
+                            isLoading: false,
+                            data: res.data,
+                        })
+                        console.log(this.state.data)
+                        //this.listaCliente();
+                    }
+                ).catch(
+                    (erro) => { alert(erro) }
+                )
             }).catch(
-                err => {
-                    alert(err)
-                }
-            )
+                (erro) => {
+                    alert(erro)
+                })
     }
 
 
     listaCliente = () => {
-        // return (this.state.data.map((x, i, y) => {
-        //     return (<Picker.Item label={x.name} key={i} value={y.id} />)
-        // }));
-        return (this.state.datos.map((x, i) => {
-            return (<Picker.Item label={x} key={i} value={x} />)
+        return (this.state.data.map((x, i, y) => {
+            return (<Picker.Item label={x.name}  value={y.id} key={i} />)
         }));
     }
 
 
     guardarCliente = () => {
-        // crearUsuario_(this.state.tipoDocumento, 
-        //     this.state.numeroDocumento, 
-        //     this.state.nombreCompleto,
-        //     this.state.email,
-        //     this.state.telefono,
-        //     this.state.contrasena,
-        //     this.state.rol);
-        this.props.navigation.navigate('crudClientes')
+        console.log(this.state.cliente)
 
     }
 
     render() {
-
         if (this.state.isLoading) {
             return (
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -71,34 +63,36 @@ class crearUsuario extends Component {
                 </View>
             )
         }
+
         return (
             <ScrollView>
                 <View >
-                    <CabeceraCrearUsuario titulo='Crear licencia' />
+                    <CabeceraCrearLicencia titulo='Crear licencia' />
                     <View style={styles.contenedorCliente}>
                         <Text style={styles.texto1}>Escoge un cliente</Text>
                         <Text>Toque abajo para seleccionar cliente</Text>
                         <Picker
-                            mode="dropdown"
                             selectedValue={this.state.cliente}
-                            onValueChange={(value) => (this.setState({ cliente: value }))}>
+                            onValueChange={(itemValue, itemIndex) =>
+                                this.setState({ cliente: itemValue })
+                            }>
                             {this.listaCliente()}
                         </Picker>
                     </View>
                     <View style={styles.contenedorDatosUsuario}>
                         <View style={styles.contenedorCliente}>
                             <Label>Numero de usuarios</Label>
-                            <TextInput style={styles.textInput} keyboardType={'numeric'} placeholder='ingresa datos' onChangeText={em => this.setState({ email: em })} />
+                            <TextInput style={styles.textInput} keyboardType={'numeric'} placeholder='ingresa datos' onChangeText={nu => this.setState({ numeroUsuarios: nu })} />
                             <Label>Precio</Label>
-                            <TextInput style={styles.textInput} keyboardType={'numeric'} placeholder='ingresa datos' onChangeText={tm => this.setState({ telefono: tm })} />
+                            <TextInput style={styles.textInput} keyboardType={'numeric'} placeholder='ingresa datos' onChangeText={pr => this.setState({ precio: pr })} />
                             <Label>Periodo</Label>
-                            <TextInput style={styles.textInput} keyboardType={'numeric'} placeholder='ingresa datos' onChangeText={tm => this.setState({ telefono: tm })} />
+                            <TextInput style={styles.textInput} keyboardType={'numeric'} placeholder='ingresa datos' onChangeText={pe => this.setState({ periodo: pe })} />
                             <View style={{ marginVertical: 10 }}>
                                 <Button title='Guardar licencia' color='#ff5a06' onPress={this.guardarCliente} />
                             </View>
                         </View>
                     </View>
-                    <Footer/>
+                    <Footer />
                 </View>
             </ScrollView>
 

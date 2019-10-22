@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TextInput, ScrollView, Alert, AsyncStorage, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TextInput, ScrollView, Alert, AsyncStorage, TouchableOpacity} from 'react-native';
 import CabeceraCrearUsuario from '../../general/componentes/cabeceraCrudSuperAdmin'
 import { Icon } from 'react-native-elements'
 import { Picker, Label } from "native-base";
@@ -12,7 +12,7 @@ class crearUsuario extends Component {
         super(props);
         this.state = {
             nombreEmpresa: '',
-            tipoDocumento: '1',
+            tipoDocumento: '0',
             numeroDocumento: '',
             email: '',
             telefono: '',
@@ -38,10 +38,36 @@ class crearUsuario extends Component {
     }
 
     editarCliente = () => {
+        const { nombreEmpresa, tipoDocumento, numeroDocumento, email, telefono, idCliente } = this.state
+        let expresionEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+        if (nombreEmpresa === '') {
+            Alert.alert('Alerta', 'Falta Campo nombre de la empresa', [{ text: 'Ok' }]);
+            return
+        }
+        if (tipoDocumento === '0') {
+            Alert.alert('Alerta', 'Falta Campo tipo de documento', [{ text: 'Ok' }]);
+            return
+        }
+        if (numeroDocumento === '') {
+            Alert.alert('Alerta', 'Falta Campo numero Documento', [{ text: 'Ok' }]);
+            return
+        }
+        if (email === '') {
+            Alert.alert('Alerta', 'Falta Campo email', [{ text: 'Ok' }]);
+            return
+        }
+        if (expresionEmail.test(email) === false) {
+            Alert.alert('Alerta', 'Email incorrecto', [{ text: 'Ok' }]);
+            return
+        }
+        if (telefono === '') {
+            Alert.alert('Alerta', 'Falta Campo telefono', [{ text: 'Ok' }]);
+            return
+        }
         AsyncStorage.getItem('token').then(
             (res) => {
                 let config = { headers: { Authorization: 'Bearer ' + res } }
-                actualizarCliente(this.state.tipoDocumento, this.state.numeroDocumento, this.state.nombreEmpresa, this.state.telefono, this.state.email, this.state.idCliente, config).then(
+                actualizarCliente(tipoDocumento, numeroDocumento, nombreEmpresa, telefono, email, idCliente, config).then(
                     res => {
                         Alert.alert('Cliente', 'Actualizado con exito', [{ text: 'Ok' }]);
                         this.props.navigation.navigate('crudClientes')
@@ -59,6 +85,22 @@ class crearUsuario extends Component {
 
 
     eliminarCliente = () => {
+        Alert.alert(
+            ' Seguro de eliminar' ,
+            ' El cliente '  + this.state.nombreEmpresa + ' ?',
+            [
+                { text: 'Si', onPress: () => this.metodoEliminarCliente() },
+                { text: 'No', onPress: () => console.log('Presiono No') }
+            ],
+            { cancelable: false },
+        );
+        return true;
+
+    }
+
+
+
+    metodoEliminarCliente() {
         AsyncStorage.getItem('token').then(
             (res) => {
                 let config = { headers: { Authorization: 'Bearer ' + res } }
@@ -76,6 +118,8 @@ class crearUsuario extends Component {
                 })
     }
 
+
+
     render() {
         return (
             <ScrollView>
@@ -89,7 +133,6 @@ class crearUsuario extends Component {
                             <TouchableOpacity style={styles.botones2} onPress={this.eliminarCliente} >
                                 <Icon color="white" name="trash" type="font-awesome" size={16} />
                             </TouchableOpacity>
-
                         </View>
                         <Label>Nombre de la empresa</Label>
                         <TextInput style={styles.textInput}
@@ -100,6 +143,7 @@ class crearUsuario extends Component {
                             mode="dropdown"
                             selectedValue={this.state.tipoDocumento}
                             onValueChange={(value) => (this.setState({ tipoDocumento: value }))}>
+                            <Picker.Item label="Seleccione otro de ser necesario" value="0" />   
                             <Picker.Item label="CC" value="1" />
                             <Picker.Item label="CE" value="2" />
                             <Picker.Item label="Nit" value="3" />

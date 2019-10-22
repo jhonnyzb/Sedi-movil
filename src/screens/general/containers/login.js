@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, ImageBackground, View, Image, AsyncStorage } from 'react-native';
+import { StyleSheet, ImageBackground, View, Image, AsyncStorage, BackHandler, Alert } from 'react-native';
 import { Card, CardItem, Text, Body, Button, Item, Input } from 'native-base';
 import { login } from '../../../servicios/generales/login'
 
@@ -15,6 +15,34 @@ export default class AnatomyExample extends Component {
         }
 
     }
+
+    componentWillMount() {
+        this.pantallaloginEntrada = this.props.navigation.addListener('didFocus', () => {
+            this.backHandler = BackHandler.addEventListener('hardwareBackPress', this.handleBackPress)
+        });
+           
+        this.pantallaLoginSalida = this.props.navigation.addListener(
+            'didBlur',
+            () => {
+                this.backHandler.remove()
+            }
+          );
+    }
+
+
+
+    handleBackPress = () => {
+        Alert.alert(
+          ' Estas a punto de salir de la aplicacion ',
+          ' Realmente deseas salir ?',
+          [
+            { text: 'Si', onPress: () =>  BackHandler.exitApp() },
+            { text: 'No', onPress: () => console.log('Presiono No') }
+          ],
+          { cancelable: false },
+        );
+        return true;
+      }
 
 
     login = () => {
@@ -102,6 +130,12 @@ export default class AnatomyExample extends Component {
 
             </ImageBackground >
         );
+    }
+
+    componentWillUnmount() {
+        this.backHandler.remove()
+        this.pantallaLoginSalida.remove();
+        this.pantallaloginEntrada.remove();
     }
 }
 

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, Button, FlatList, View, TextInput, TouchableOpacity, AsyncStorage } from 'react-native';
+import { StyleSheet, Text, Button, FlatList, View, TextInput, TouchableOpacity, AsyncStorage, BackHandler, Alert } from 'react-native';
 import { guardarPreguntasQuiz } from '../../../servicios/serviciosSuperAdmin/crudCursos'
 import Modal from "react-native-modal";
 import { Icon } from 'react-native-elements'
@@ -22,6 +22,44 @@ class index extends Component {
 
         };
     }
+
+    componentWillMount() {
+        this.backHandler = BackHandler.addEventListener('hardwareBackPress', this.handleBackPress)
+    }
+
+    static navigationOptions = ({ navigation }) => {
+        return {
+            headerLeft: (<Icon name="chevron-left"
+                onPress={() => { 
+                    Alert.alert(
+                        ' No has Completado el Quiz ',
+                        ' Realmente deseas salir ?',
+                        [
+                          { text: 'Si', onPress: () => navigation.navigate('crudCursos') },
+                          { text: 'No', onPress: () => console.log('Presiono No') }
+                        ],
+                        { cancelable: false },
+                      );
+                      return true;
+                    }}
+                size={35} color="white" />)
+        }
+    }
+
+
+
+    handleBackPress = () => {
+        Alert.alert(
+          ' No has Completado el Quiz ',
+          ' Realmente deseas salir ?',
+          [
+            { text: 'Si', onPress: () => this.props.navigation.navigate('editarCursos') },
+            { text: 'No', onPress: () => console.log('Presiono No') }
+          ],
+          { cancelable: false },
+        );
+        return true;
+      }
 
 
     addRespuesta = () => {
@@ -48,6 +86,10 @@ class index extends Component {
         });
 
     }
+
+
+
+
 
     eliminarRespuesta = (index) => {
         var array = [...this.state.respuestas]; // make a separate copy of the array
@@ -79,7 +121,7 @@ class index extends Component {
                 guardarPreguntasQuiz(navigation.getParam('idExamen', ''), pregunta, peso, respuestas, config).then(
                     res => {
                         alert('pregunta Guardada')
-                        this.setState({ pregunta: '', peso: '', respuestas: []})
+                        this.setState({ pregunta: '', peso: '', respuestas: [] })
                     }).catch(
                         erro => {
                             alert('Error Creando Quiz')
@@ -151,7 +193,6 @@ class index extends Component {
         if (this.state.respuestas.length === 0) {
             return <View style={{ justifyContent: 'center', alignItems: 'center', height: '70%' }}>
                 <Icon name='info-circle' type='font-awesome' color='red' size={100} />
-                <Text>Usted no ha generado preguntas para este modulo</Text>
             </View>
         }
     }
@@ -258,6 +299,11 @@ class index extends Component {
                 </Modal>
             </View>
         );
+    }
+
+
+    componentWillUnmount() {
+        this.backHandler.remove()
     }
 }
 

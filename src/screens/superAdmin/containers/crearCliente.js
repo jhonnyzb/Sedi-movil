@@ -12,7 +12,7 @@ class crearUsuario extends Component {
         super(props);
         this.state = {
             nombreEmpresa: '',
-            tipoDocumento: '1',
+            tipoDocumento: '0',
             numeroDocumento: '',
             email: '',
             telefono: '',
@@ -22,20 +22,46 @@ class crearUsuario extends Component {
 
 
     guardarCliente = () => {
+        const { nombreEmpresa, tipoDocumento, numeroDocumento, email, telefono } = this.state
+        let expresionEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+        if (nombreEmpresa === '') {
+            Alert.alert('Alerta', 'Falta Campo nombre de la empresa', [{ text: 'Ok' }]);
+            return
+        }
+        if (tipoDocumento === '0') {
+            Alert.alert('Alerta', 'Falta Campo tipo de documento', [{ text: 'Ok' }]);
+            return
+        }
+        if (numeroDocumento === '') {
+            Alert.alert('Alerta', 'Falta Campo numero Documento', [{ text: 'Ok' }]);
+            return
+        }
+        if (email === '') {
+            Alert.alert('Alerta', 'Falta Campo email', [{ text: 'Ok' }]);
+            return
+        }
+        if (expresionEmail.test(email) === false) {
+            Alert.alert('Alerta', 'Email incorrecto', [{ text: 'Ok' }]);
+            return
+        }
+        if (telefono === '') {
+            Alert.alert('Alerta', 'Falta Campo telefono', [{ text: 'Ok' }]);
+            return
+        }
         AsyncStorage.getItem('token').then(
-            (res)=>{
+            (res) => {
                 let config = { headers: { Authorization: 'Bearer ' + res } }
-                crearCliente(this.state.tipoDocumento, this.state.numeroDocumento,this.state.nombreEmpresa,this.state.telefono,this.state.email, config).then(
-                    res => { 
-                      Alert.alert('Cliente', 'creado con exito', [{text: 'Ok'}]);
-                      this.props.navigation.navigate('crudClientes')
-                  }).catch(
-                      erro=> {
-                          alert(erro)
-                      }
-                  )
+                crearCliente(tipoDocumento, numeroDocumento, nombreEmpresa, telefono, email, config).then(
+                    res => {
+                        Alert.alert('Cliente', 'creado con exito', [{ text: 'Ok' }]);
+                        this.props.navigation.navigate('crudClientes')
+                    }).catch(
+                        erro => {
+                            alert(erro)
+                        }
+                    )
             }).catch(
-                (erro)=>{
+                (erro) => {
                     alert(erro)
                 }
             )
@@ -54,6 +80,7 @@ class crearUsuario extends Component {
                             mode="dropdown"
                             selectedValue={this.state.tipoDocumento}
                             onValueChange={(value) => (this.setState({ tipoDocumento: value }))}>
+                            <Picker.Item label="Seleccione opcion" value="0" />
                             <Picker.Item label="CC" value="1" />
                             <Picker.Item label="CE" value="2" />
                             <Picker.Item label="Nit" value="3" />
@@ -74,12 +101,12 @@ class crearUsuario extends Component {
                             <Label>Telefono </Label>
                             <TextInput style={styles.textInput} keyboardType={'numeric'} placeholder='ingresa datos' onChangeText={te => this.setState({ telefono: te })} />
                             <TouchableOpacity style={styles.bGuardarCliente} onPress={this.guardarCliente}>
-                                <Text style={{color: 'white'}} >Guardar cliente</Text>
+                                <Text style={{ color: 'white' }} >Guardar cliente</Text>
                             </TouchableOpacity>
-                           
+
                         </View>
                     </View>
-                    <Footer/>
+                    <Footer />
                 </View>
             </ScrollView>
 
@@ -108,7 +135,7 @@ const styles = StyleSheet.create({
         borderColor: '#F7F7F7',
         marginBottom: 10
     },
-    bGuardarCliente:{
+    bGuardarCliente: {
         backgroundColor: '#ff5a06',
         borderRadius: 5,
         alignItems: 'center',

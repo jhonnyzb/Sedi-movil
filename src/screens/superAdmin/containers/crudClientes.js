@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, FlatList, ScrollView, TouchableOpacity, AsyncStorage } from 'react-native';
 import { Icon } from 'react-native-elements'
 import Footer from '../../general/componentes/footer'
-import { consultaCursosUsuario } from '../../../servicios/serviciosUsuario/consultaCursosUsuario';
 import { consultaClientes } from '../../../servicios/serviciosSuperAdmin/crudClientes';
 
 

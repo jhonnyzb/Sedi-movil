@@ -1,6 +1,7 @@
 import React from 'react';
-import { createAppContainer } from 'react-navigation';
+import { createAppContainer, HeaderBackButton } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
+import { Icon } from 'react-native-elements'
 import { Image, Text, StyleSheet } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
@@ -285,6 +286,7 @@ const Navegacion = createStackNavigator({
             },
             headerTintColor: '#ff5a06',
             headerRight: <BotonBarra />
+
         }
     },
 

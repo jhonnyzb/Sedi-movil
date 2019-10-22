@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet } from 'react-native'
+import { Text, View, StyleSheet, Alert } from 'react-native'
 import { Icon } from 'react-native-elements'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export default class inicioUsuario extends Component {
+
 
 
     crudUsuarios = () => {

@@ -43,12 +43,12 @@ class crudCursos extends Component {
         });
 
 
-        this.pantallaCrudCursosSalida =navigation.addListener(
+        this.pantallaCrudCursosSalida = navigation.addListener(
             'didBlur',
             () => {
-                this.setState({isLoading: true})
+                this.setState({ isLoading: true })
             }
-          );
+        );
     }
 
 
@@ -153,6 +153,7 @@ class crudCursos extends Component {
 
         )
     }
+
 
     render() {
         if (this.state.isLoading) {
