@@ -79,7 +79,7 @@ class crudLicencias extends Component {
 
 
     licencias(item, index) {
-        const { licenses_number, status_id } = item
+        const { licenses_number, status_id, start_date } = item
         return (
             <TouchableOpacity onPress={() => { this.editarLicencia(item) }}>
                 <View style={styles.listado}>
@@ -88,7 +88,7 @@ class crudLicencias extends Component {
                             {index + 1}
                         </Text>
                         <Text style={{ marginLeft: '7%' }}>
-                            {licenses_number} estudiantes
+                            {start_date}
                         </Text>
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: 'flex-end', width: '40%' }}>
